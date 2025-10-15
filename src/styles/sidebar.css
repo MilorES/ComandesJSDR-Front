@@ -1,0 +1,27 @@
+.sidebar {
+    width: 220px;
+    background: #ddd;
+    color: #ddd;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar nav a {
+    margin-top: 10px;
+    color: #000000;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.sidebar nav a.active {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.sidebar nav {
+    margin-top: 100px; /* mueve todo el nav hacia abajo */
+    display: flex;
+    flex-direction: column;
+}
