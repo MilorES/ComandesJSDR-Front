@@ -21,7 +21,15 @@
 }
 
 .sidebar nav {
-    margin-top: 100px; /* mueve todo el nav hacia abajo */
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
 }
+
+.logo img {
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    display: block;
+}
+
