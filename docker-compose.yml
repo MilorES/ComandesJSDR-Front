@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    image: comandasjsdr_front:latest
+    ports:
+      - "5001:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

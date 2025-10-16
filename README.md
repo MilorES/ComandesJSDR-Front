@@ -9,15 +9,17 @@ Requereix Node.js version 20.19+ o 22.12+.
 # Des de l'arrel del repo
 npm install
 npm run dev
-
-# Veure logs
-docker compose logs -f comandesapi
 ```
 
 # Desplegament
 
-Requereix Node.js version 20.19+ o 22.12+.
-
 ```shell
-npm run build
+# Des de l'arrel del repo
+docker compose up --build -d
+
+# Veure logs
+docker compose logs -f
+
+# Aturar i eliminar contenidors
+docker compose down
 ```
