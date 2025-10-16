@@ -9,9 +9,6 @@ Requereix Node.js version 20.19+ o 22.12+.
 # Des de l'arrel del repo
 npm install
 npm run dev
-
-# Veure logs
-docker compose logs -f comandesapi
 ```
 
 # Desplegament
