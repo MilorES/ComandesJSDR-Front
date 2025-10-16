@@ -12,6 +12,9 @@ npm run dev
 ```
 
 # Desplegament
+Aquest repositori inclou un `docker-compose.yml`.
+
+Requereix Docker y Docker Compose.
 
 ```shell
 # Des de l'arrel del repo
