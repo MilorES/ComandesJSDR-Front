@@ -1,51 +1,33 @@
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import "../styles/productList.css";
 
 export default function ProductList() {
-  const products = [
-    {
-      Id: 1,
-      Nom: "Ordinador portàtil",
-      Descripcio: "Ordinador portàtil per oficina amb pantalla de 15.6 polzades",
-      Preu: 899.99,
-      Estoc: 10,
-      Categoria: "Informàtica",
-      Actiu: true,
-    },
-    {
-      Id: 2,
-      Nom: "Ratolí sense fils",
-      Descripcio: "Ratolí òptic sense fils amb sensor de precisió",
-      Preu: 25.5,
-      Estoc: 50,
-      Categoria: "Informàtica",
-      Actiu: true,
-    },
-    {
-      Id: 3,
-      Nom: "Teclat mecànic",
-      Descripcio: "Teclat mecànic retroil·luminat amb switches Cherry MX",
-      Preu: 120.0,
-      Estoc: 25,
-      Categoria: "Informàtica",
-      Actiu: true,
-    },
-    {
-      Id: 4,
-      Nom: "Cadira d'oficina",
-      Descripcio: "Cadira ergonòmica amb suport lumbar ajustable",
-      Preu: 149.99,
-      Estoc: 8,
-      Categoria: "Mobiliari",
-      Actiu: false,
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/articles?actius=true")
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error al cargar productos:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p>Carregant productes...</p>;
+  if (products.length === 0) return <p>No hi ha productes actius.</p>;
 
   return (
     <div className="product-list">
       {products.map((product) => (
-        <ProductCard key={product.Id} product={product} />
+        <ProductCard key={product.id} product={product} />
       ))}
     </div>
   );
 }
+
