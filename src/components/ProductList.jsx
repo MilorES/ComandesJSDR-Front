@@ -7,7 +7,7 @@ export default function ProductList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/articles?actius=true")
+    fetch(`${import.meta.env.VITE_API_URL}/articles?actius=true`)
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
