@@ -3,12 +3,16 @@ import "../styles/productCard.css";
 export default function ProductCard({ product }) {
   return (
     <div className="product-card">
-      <h3 className="product-name">{product.Nom}</h3>
-      <p className="product-description">{product.Descripcio}</p>
-      <p className="product-price">💰 {product.Preu.toFixed(2)} €</p>
-      <p className="product-stock">📦 Estoc: {product.Estoc}</p>
-      <p className={`product-status ${product.Actiu ? "active" : "inactive"}`}>
-        {product.Actiu ? "Actiu" : "Inactiu"}
+      <h3 className="product-name">{product?.nom || "Sense nom"}</h3>
+      <p className="product-description">{product?.descripcio || "Sense descripció"}</p>
+      <p className="product-price">
+        💰 {product?.preu !== undefined ? product.preu.toFixed(2) : "N/A"} €
+      </p>
+      <p className="product-stock">
+        📦 Estoc: {product?.estoc !== undefined ? product.estoc : "N/A"}
+      </p>
+      <p className={`product-status ${product?.actiu ? "active" : "inactive"}`}>
+        {product?.actiu ? "Actiu" : "Inactiu"}
       </p>
       <button className="add-button">Afegir</button>
     </div>
