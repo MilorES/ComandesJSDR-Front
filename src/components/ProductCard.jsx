@@ -14,7 +14,6 @@ export default function ProductCard({ product }) {
       <p className={`product-status ${product?.actiu ? "active" : "inactive"}`}>
         {product?.actiu ? "Actiu" : "Inactiu"}
       </p>
-      <button className="add-button">Afegir</button>
     </div>
   );
 }

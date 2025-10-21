@@ -20,3 +20,18 @@ body {
   padding: 20px;
   background-color: white;
 }
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .main-content {
+    flex: none;
+  }
+
+  .page-content {
+    padding: 10px;
+  }
+}

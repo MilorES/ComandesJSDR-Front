@@ -2,7 +2,7 @@
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 16px;
+  padding: 12px;
   width: 280px;
   transition: transform 0.2s ease;
 }
@@ -19,7 +19,7 @@
 .product-description {
   font-size: 0.9rem;
   color: #555;
-  margin: 8px 0;
+  margin: 5px 0;
 }
 
 .product-price {
@@ -31,7 +31,7 @@
 .product-category,
 .product-status {
   font-size: 0.85rem;
-  margin: 4px 0;
+  margin: 10px 0;
 }
 
 .product-status.active {
@@ -41,20 +41,3 @@
 .product-status.inactive {
   color: red;
 }
-
-.add-button {
-  margin-top: 10px;
-  padding: 8px 14px;
-  background-color: #bdbdbd;
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.add-button:hover {
-  background-color: #0056b3;
-  color: #fff;
-}
-
