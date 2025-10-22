@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import "../styles/productList.css";
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -19,11 +18,11 @@ export default function ProductList() {
       });
   }, []);
 
-  if (loading) return <p>Carregant productes...</p>;
-  if (products.length === 0) return <p>No hi ha productes actius.</p>;
+  if (loading) return <p className="text-gray-600 p-4">Carregant productes...</p>;
+  if (products.length === 0) return <p className="text-gray-600 p-4">No hi ha productes actius.</p>;
 
   return (
-    <div className="product-list">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
