@@ -2,16 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Pots mantenir alguns estils personalitzats si vols */
+/* Tailwind CSS está activo correctamente */
 body {
   margin: 0;
   font-family: sans-serif;
 }
-
-/* Ara pots fer servir classes de Tailwind directament a JSX: 
-- En lloc de .app-layout, utilitza: className="flex h-screen" 
-- En lloc de .main-content, utilitza: className="flex-1 flex flex-col bg-gray-100" 
-- En lloc de .page-content, utilitza: className="flex-1 p-5 bg-white" 
-
-Les media queries responsive es fan amb prefixos: md:, lg:, etc.
-*/

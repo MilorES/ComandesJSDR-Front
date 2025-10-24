@@ -12,7 +12,7 @@ export default function Header({ onToggleMenu }) {
   const currentSection = sectionNames[location.pathname] || "";
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 px-4 md:px-6 py-4 flex items-center gap-4">
+    <header className="bg-white shadow-sm border-b border-gray-200 py-10 px-4 md:px-6 md:py-14 flex items-center gap-4">
       {/* Botón hamburguesa visible solo en mòbil */}
       <button
         onClick={onToggleMenu}
@@ -23,8 +23,19 @@ export default function Header({ onToggleMenu }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
-      
+
       <h1 className="text-xl md:text-2xl font-bold text-gray-800">{currentSection}</h1>
+
+      <button
+        onClick={() => {
+          localStorage.removeItem("isLoggedIn");
+          window.location.href = "/login";
+        }}
+        className="ml-auto bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+      >
+        Cerrar sesión
+      </button>
+
     </header>
   );
 }

@@ -3,8 +3,10 @@ import App from "./App";
 import Productes from "./pages/Productes";
 import Dashboard from "./pages/Dashboard";
 import GestioComandes from "./pages/GestioComandes";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
+  { path: "/login", element: <Login /> },
   {
     path: "/",
     element: <App />,
