@@ -4,7 +4,7 @@ export default function Header({ onToggleMenu }) {
   const location = useLocation();
 
   const sectionNames = {
-    "/": "Dashboard",
+    "/dashboard": "Dashboard",
     "/productes": "Productes",
     "/gestio-comandes": "Gestió Comandes"
   };
@@ -12,7 +12,7 @@ export default function Header({ onToggleMenu }) {
   const currentSection = sectionNames[location.pathname] || "";
 
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 px-4 md:px-6 py-4 flex items-center gap-4">
+    <header className="bg-white shadow-sm border-b border-gray-200 py-10 px-4 md:px-6 md:py-14 flex items-center gap-4">
       {/* Botón hamburguesa visible solo en mòbil */}
       <button
         onClick={onToggleMenu}
