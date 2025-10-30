@@ -4,7 +4,7 @@ export default function Header({ onToggleMenu }) {
   const location = useLocation();
 
   const sectionNames = {
-    "/": "Dashboard",
+    "/dashboard": "Dashboard",
     "/productes": "Productes",
     "/gestio-comandes": "Gestió Comandes"
   };
