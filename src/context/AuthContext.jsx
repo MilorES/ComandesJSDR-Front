@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Error al iniciar sesión");
+      if (!response.ok) throw new Error(data.message || "Error a l'iniciar sessió");
 
       localStorage.setItem("token", data.token);
       localStorage.setItem(
