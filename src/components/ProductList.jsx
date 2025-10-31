@@ -58,7 +58,7 @@ export default function ProductList() {
         setLoading(false);
       } catch (err) {
         console.error("Error al carregar productes:", err);
-        setError(err.message || "Error desconocido");
+        setError(err.message || "Error desconegut");
         setLoading(false);
       }
     };
