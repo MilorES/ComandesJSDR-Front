@@ -39,9 +39,9 @@ export default function Sidebar({ isOpen, onClose }) {
         {/* Navegació */}
         <nav className="flex-1 py-6">
           <Link
-            to="/"
+            to="/dashboard"
             className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
-              location.pathname === "/" ? "bg-slate-600 border-l-4 border-white" : ""
+              location.pathname === "/dashboard" ? "bg-slate-600 border-l-4 border-white" : ""
             }`}
             onClick={onClose}
           >
