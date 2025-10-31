@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 export default function ProtectedRoute({ children, requireAdmin = false }) {
   const { user, loading } = useAuth();
 
-  if (loading) return <p>Comprobando sesión...</p>;
+  if (loading) return <p>Comprovant sessió...</p>;
 
 
   // Si no está autenticado, redirigir al login
