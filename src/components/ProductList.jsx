@@ -57,7 +57,7 @@ export default function ProductList() {
         setProducts(data);
         setLoading(false);
       } catch (err) {
-        console.error("Error al cargar productos:", err);
+        console.error("Error al carregar productes:", err);
         setError(err.message || "Error desconocido");
         setLoading(false);
       }
