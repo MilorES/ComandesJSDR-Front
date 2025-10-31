@@ -3,18 +3,44 @@ import App from "./App";
 import Productes from "./pages/Productes";
 import Dashboard from "./pages/Dashboard";
 import GestioComandes from "./pages/GestioComandes";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
+  { 
+    path: "/login", 
+    element: <Login /> 
+  },
   {
     path: "/",
-    element: <App />,
+    element: (
+      <ProtectedRoute>
+        <App />
+      </ProtectedRoute>
+    ),
     children: [
-      { index: true, element: <Navigate to="productes" replace /> },
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "productes", element: <Productes /> },
-      { path: "gestio-comandes", element: <GestioComandes /> },
+      { 
+        index: true, 
+        element: <Navigate to="/dashboard" replace /> 
+      },
+      { 
+        path: "dashboard", 
+        element: <Dashboard /> 
+      },
+      { 
+        path: "productes", 
+        element: <Productes /> 
+      },
+      { 
+        path: "gestio-comandes", 
+        element: <GestioComandes /> 
+      },
     ],
   },
+  {
+    path: "*",
+    element: <Navigate to="/dashboard" replace />
+  }
 ]);
 
 export default router;

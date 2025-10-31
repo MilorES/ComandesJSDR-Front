@@ -1,30 +1,47 @@
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Header({ onToggleMenu }) {
-  const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  const sectionNames = {
-    "/dashboard": "Dashboard",
-    "/productes": "Productes",
-    "/gestio-comandes": "Gestió Comandes"
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
-  const currentSection = sectionNames[location.pathname] || "";
-
   return (
-    <header className="bg-white shadow-sm border-b border-gray-200 py-10 px-4 md:px-6 md:py-14 flex items-center gap-4">
-      {/* Botón hamburguesa visible solo en mòbil */}
-      <button
-        onClick={onToggleMenu}
-        className="md:hidden text-gray-700 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-colors"
-        aria-label="Abrir menú"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-      
-      <h1 className="text-xl md:text-2xl font-bold text-gray-800">{currentSection}</h1>
+    <header className="bg-slate-800 text-white p-4 flex items-center justify-between shadow-md">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onToggleMenu}
+          className="p-2 hover:bg-slate-700 rounded-lg transition md:hidden"
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="flex items-center gap-4">
+        {user && (
+          <span className="text-sm font-medium">
+            {user.role === 'Administrator' ? 'Administrador' : 'Usuari'}
+          </span>
+        )}
+
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition"
+          title="Tancar sessió"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span className="hidden sm:inline">Sortir</span>
+        </button>
+      </div>
     </header>
   );
 }

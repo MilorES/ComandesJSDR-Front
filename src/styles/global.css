@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind CSS está activo correctamente */
 body {
   margin: 0;
   font-family: sans-serif;
 }
-
