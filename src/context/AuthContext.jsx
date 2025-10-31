@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true };
     } catch (error) {
-      console.error("Error en login:", error);
+      console.error("Error en l'inici de sessió:", error);
       return { success: false, message: error.message };
     }
   };
