@@ -1,6 +1,10 @@
+import MainLayout from "../layouts/MainLayout";
+
 export default function GestioComandes() {
     return (
-        <h1>Work in progress...</h1>
+        <MainLayout>
+            <h1>Work in progress...</h1>
+        </MainLayout>
     );
 }
 

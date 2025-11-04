@@ -3,14 +3,13 @@ import App from "./App";
 import Productes from "./pages/Productes";
 import Dashboard from "./pages/Dashboard";
 import GestioComandes from "./pages/GestioComandes";
+import AdminPanel from "./pages/AdminPanel"; // nueva página para admin
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([
-  { 
-    path: "/login", 
-    element: <Login /> 
-  },
+  { path: "/login", element: <Login /> },
+
   {
     path: "/",
     element: (
@@ -19,28 +18,24 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { 
-        index: true, 
-        element: <Navigate to="/dashboard" replace /> 
-      },
-      { 
-        path: "dashboard", 
-        element: <Dashboard /> 
-      },
-      { 
-        path: "productes", 
-        element: <Productes /> 
-      },
-      { 
-        path: "gestio-comandes", 
-        element: <GestioComandes /> 
+      { index: true, element: <Navigate to="/dashboard" replace /> },
+      { path: "dashboard", element: <Dashboard /> },
+      { path: "productes", element: <Productes /> },
+      { path: "gestio-comandes", element: <GestioComandes /> },
+
+      // 🔒 Ruta exclusiva para administradores
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute requireAdmin={true}>
+            <AdminPanel />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
-  {
-    path: "*",
-    element: <Navigate to="/dashboard" replace />
-  }
+
+  { path: "*", element: <Navigate to="/dashboard" replace /> },
 ]);
 
 export default router;

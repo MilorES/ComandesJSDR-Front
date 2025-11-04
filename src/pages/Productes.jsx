@@ -1,9 +1,12 @@
 import ProductList from "../components/ProductList";
+import MainLayout from "../layouts/MainLayout";
 
 export default function Productes() {
   return (
-    <div>
-      <ProductList />
-    </div>
+    <MainLayout>
+      <div>
+        <ProductList />
+      </div>
+    </MainLayout>
   );
 }
