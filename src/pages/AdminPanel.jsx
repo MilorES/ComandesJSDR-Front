@@ -1,60 +1,262 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import MainLayout from "../layouts/MainLayout";
+import Toast from "../components/Toast";
 
 export default function AdminPanel() {
-  const { user, getToken } = useAuth();
+  const { getToken, logout } = useAuth();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [modalType, setModalType] = useState(null); // "add" | "edit" | "delete"
+  const [modalType, setModalType] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [formData, setFormData] = useState({
+    nom: "",
+    descripcio: "",
+    preu: "",
+    estoc: "",
+    categoria: "",
+    actiu: true
+  });
+  const [formErrors, setFormErrors] = useState({});
 
-  // Simulación temporal
+  // Carregar productes des de l'API
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const token = getToken();
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/articles`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          logout();
+          throw new Error("Sessió expirada");
+        }
+        throw new Error(`Error ${response.status}`);
+      }
+
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      showToast(error.message || "Error al carregar productes", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    setProducts([
-      { id: 1, nom: "Producte A", preu: 10, estoc: 5, actiu: true },
-      { id: 2, nom: "Producte B", preu: 20, estoc: 0, actiu: true },
-      { id: 3, nom: "Producte C", preu: 15, estoc: 3, actiu: false },
-    ]);
+    fetchProducts();
   }, []);
+
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+  };
 
   const openModal = (type, product = null) => {
     setModalType(type);
     setSelectedProduct(product);
+    setFormErrors({});
+    
+    if (type === "edit" && product) {
+      setFormData({
+        nom: product.nom,
+        descripcio: product.descripcio || "",
+        preu: product.preu,
+        estoc: product.estoc,
+        categoria: product.categoria || "",
+        actiu: product.actiu
+      });
+    } else if (type === "add") {
+      setFormData({
+        nom: "",
+        descripcio: "",
+        preu: "",
+        estoc: "",
+        categoria: "",
+        actiu: true
+      });
+    }
   };
 
   const closeModal = () => {
     setModalType(null);
     setSelectedProduct(null);
+    setFormData({
+      nom: "",
+      descripcio: "",
+      preu: "",
+      estoc: "",
+      categoria: "",
+      actiu: true
+    });
+    setFormErrors({});
   };
+
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.nom.trim()) {
+      errors.nom = "El nom és obligatori";
+    }
+    
+    if (!formData.preu || parseFloat(formData.preu) <= 0) {
+      errors.preu = "El preu ha de ser superior a 0";
+    }
+    
+    if (formData.estoc === "" || parseInt(formData.estoc) < 0) {
+      errors.estoc = "L'estoc no pot ser negatiu";
+    }
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const token = getToken();
+      const url = modalType === "add" 
+        ? `${import.meta.env.VITE_API_URL}/articles`
+        : `${import.meta.env.VITE_API_URL}/articles/${selectedProduct.id}`;
+      
+      const method = modalType === "add" ? "POST" : "PUT";
+      
+      const body = {
+        nom: formData.nom,
+        descripcio: formData.descripcio || null,
+        preu: parseFloat(formData.preu),
+        estoc: parseInt(formData.estoc),
+        categoria: formData.categoria || null,
+        actiu: formData.actiu
+      };
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        if (response.status === 409) {
+          throw new Error(errorData || "Ja existeix un article amb aquest nom");
+        }
+        if (response.status === 400) {
+          throw new Error(errorData || "Dades incorrectes");
+        }
+        if (response.status === 401) {
+          logout();
+          throw new Error("Sessió expirada");
+        }
+        throw new Error(errorData || "Error al guardar el producte");
+      }
+
+      showToast("Canvis aplicats correctament", "success");
+      closeModal();
+      await fetchProducts();
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/articles/${selectedProduct.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        if (response.status === 401) {
+          logout();
+          throw new Error("Sessió expirada");
+        }
+        if (response.status === 404) {
+          throw new Error("Producte no trobat");
+        }
+        throw new Error(errorText || "Error al eliminar el producte");
+      }
+
+      showToast("Producte eliminat correctament", "success");
+      closeModal();
+      await fetchProducts();
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  };
+
+  if (loading) {
+    return (
+      <MainLayout>
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Carregant productes...</p>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
       <div className="p-4 md:p-8 text-white">
-        {/* Header + Botón */}
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <button
             onClick={() => openModal("add")}
-            className="
-      bg-green-600 hover:bg-green-700
-      px-3 py-2 text-sm
-      rounded-lg font-semibold
-      w-auto self-end
-      sm:px-4 sm:text-base sm:self-auto
-      text-center
-    "
+            className="bg-green-600 hover:bg-green-700 px-3 py-2 text-sm rounded-lg font-semibold w-auto self-end sm:px-4 sm:text-base sm:self-auto text-center"
           >
             ➕ Afegir producte
           </button>
         </div>
 
-        {/* 📱 Vista responsive de productos */}
         <div className="overflow-x-auto bg-white rounded-lg shadow text-gray-800">
-          {/* Tabla (solo visible en pantallas medianas o más grandes) */}
           <table className="hidden md:table w-full border-collapse">
             <thead className="bg-slate-800 text-white">
               <tr>
                 <th className="py-3 px-4 text-left">ID</th>
                 <th className="py-3 px-4 text-left">Nom producte</th>
+                <th className="py-3 px-4 text-left">Categoria</th>
                 <th className="py-3 px-4 text-left">Preu (€)</th>
                 <th className="py-3 px-4 text-left">Estoc</th>
                 <th className="py-3 px-4 text-left">Estat</th>
@@ -63,40 +265,23 @@ export default function AdminPanel() {
             </thead>
             <tbody>
               {products.map((p) => (
-                <tr
-                  key={p.id}
-                  className="border-b hover:bg-gray-100 transition-colors"
-                >
+                <tr key={p.id} className="border-b hover:bg-gray-100 transition-colors">
                   <td className="py-3 px-4">{p.id}</td>
                   <td className="py-3 px-4 font-medium">{p.nom}</td>
+                  <td className="py-3 px-4">{p.categoria || "-"}</td>
                   <td className="py-3 px-4">{p.preu.toFixed(2)} €</td>
                   <td className="py-3 px-4">{p.estoc}</td>
                   <td className="py-3 px-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-semibold ${p.actiu
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                        }`}
-                    >
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      p.actiu ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                    }`}>
                       {p.actiu ? "Actiu" : "Inactiu"}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-center">
                     <div className="flex justify-center gap-3">
-                      <button
-                        onClick={() => openModal("edit", p)}
-                        className="text-yellow-500 hover:text-yellow-400"
-                        title="Editar"
-                      >
-                        📝
-                      </button>
-                      <button
-                        onClick={() => openModal("delete", p)}
-                        className="text-red-600 hover:text-red-500"
-                        title="Eliminar"
-                      >
-                        🗑️
-                      </button>
+                      <button onClick={() => openModal("edit", p)} className="text-yellow-500 hover:text-yellow-400" title="Editar">📝</button>
+                      <button onClick={() => openModal("delete", p)} className="text-red-600 hover:text-red-500" title="Eliminar">🗑️</button>
                     </div>
                   </td>
                 </tr>
@@ -104,142 +289,129 @@ export default function AdminPanel() {
             </tbody>
           </table>
 
-          {/* 🧱 Cards (solo visible en móvil) */}
           <div className="block md:hidden divide-y">
             {products.map((p) => (
               <div key={p.id} className="p-4">
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-semibold text-lg">{p.nom}</h3>
-                  <span
-                    className={`px-2 py-1 rounded-full text-sm ${p.actiu
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                      }`}
-                  >
+                  <span className={`px-2 py-1 rounded-full text-sm ${
+                    p.actiu ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  }`}>
                     {p.actiu ? "Actiu" : "Inactiu"}
                   </span>
                 </div>
+                <p className="text-sm text-gray-600">🏷️ {p.categoria || "Sense categoria"}</p>
                 <p className="text-sm text-gray-600">💰 {p.preu.toFixed(2)} €</p>
-                <p className="text-sm text-gray-600 mb-2">
-                  📦 Estoc: {p.estoc}
-                </p>
+                <p className="text-sm text-gray-600 mb-2">📦 Estoc: {p.estoc}</p>
                 <div className="flex justify-end gap-3 mt-2">
-                  <button
-                    onClick={() => openModal("edit", p)}
-                    className="text-yellow-500 hover:text-yellow-400"
-                  >
-                    📝
-                  </button>
-                  <button
-                    onClick={() => openModal("delete", p)}
-                    className="text-red-600 hover:text-red-500"
-                  >
-                    🗑️
-                  </button>
+                  <button onClick={() => openModal("edit", p)} className="text-yellow-500 hover:text-yellow-400">📝</button>
+                  <button onClick={() => openModal("delete", p)} className="text-red-600 hover:text-red-500">🗑️</button>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 🧩 Modales (iguales que antes) */}
         {(modalType === "add" || modalType === "edit") && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-lg text-gray-800">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg text-gray-800 max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-4 text-center">
-                {modalType === "add"
-                  ? "🆕 Afegir producte"
-                  : "✏️ Editar producte"}
+                {modalType === "add" ? "🆕 Afegir producte" : "✏️ Editar producte"}
               </h2>
 
-              <form className="space-y-4">
+              <div className="space-y-4">
                 <div>
-                  <label className="block font-medium mb-1">Nom</label>
+                  <label className="block font-medium mb-1">Nom <span className="text-red-500">*</span></label>
                   <input
                     type="text"
-                    className="w-full border rounded p-2"
-                    defaultValue={selectedProduct?.nom || ""}
+                    name="nom"
+                    value={formData.nom}
+                    onChange={handleInputChange}
+                    className={`w-full border rounded p-2 ${formErrors.nom ? "border-red-500" : "border-gray-300"}`}
                   />
+                  {formErrors.nom && <p className="text-red-500 text-sm mt-1">{formErrors.nom}</p>}
                 </div>
 
                 <div>
                   <label className="block font-medium mb-1">Descripció</label>
                   <textarea
-                    className="w-full border rounded p-2"
+                    name="descripcio"
+                    value={formData.descripcio}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded p-2"
                     rows="3"
-                    defaultValue={selectedProduct?.descripcio || ""}
                   ></textarea>
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-1">Categoria</label>
+                  <input
+                    type="text"
+                    name="categoria"
+                    value={formData.categoria}
+                    onChange={handleInputChange}
+                    className="w-full border border-gray-300 rounded p-2"
+                    placeholder="Ex: Informàtica, Electrònica..."
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-medium mb-1">Preu (€)</label>
+                    <label className="block font-medium mb-1">Preu (€) <span className="text-red-500">*</span></label>
                     <input
                       type="number"
-                      className="w-full border rounded p-2"
-                      defaultValue={selectedProduct?.preu || ""}
+                      name="preu"
+                      step="0.01"
+                      value={formData.preu}
+                      onChange={handleInputChange}
+                      className={`w-full border rounded p-2 ${formErrors.preu ? "border-red-500" : "border-gray-300"}`}
                     />
+                    {formErrors.preu && <p className="text-red-500 text-sm mt-1">{formErrors.preu}</p>}
                   </div>
                   <div>
-                    <label className="block font-medium mb-1">Estoc</label>
+                    <label className="block font-medium mb-1">Estoc <span className="text-red-500">*</span></label>
                     <input
                       type="number"
-                      className="w-full border rounded p-2"
-                      defaultValue={selectedProduct?.estoc || ""}
+                      name="estoc"
+                      value={formData.estoc}
+                      onChange={handleInputChange}
+                      className={`w-full border rounded p-2 ${formErrors.estoc ? "border-red-500" : "border-gray-300"}`}
                     />
+                    {formErrors.estoc && <p className="text-red-500 text-sm mt-1">{formErrors.estoc}</p>}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    defaultChecked={selectedProduct?.actiu || false}
-                  />
+                  <input type="checkbox" name="actiu" checked={formData.actiu} onChange={handleInputChange} className="w-4 h-4" />
                   <label>Actiu</label>
                 </div>
 
                 <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded font-medium w-full sm:w-auto"
-                  >
-                    {modalType === "add" ? "Afegir" : "Desar canvis"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={closeModal}
-                    className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded font-medium w-full sm:w-auto"
-                  >
+                  <button type="button" onClick={closeModal} className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded font-medium w-full sm:w-auto">
                     Cancel·lar
                   </button>
+                  <button type="button" onClick={handleSubmit} className="px-4 py-2 bg-slate-600 hover:bg-slate-500 text-white rounded font-medium w-full sm:w-auto">
+                    {modalType === "add" ? "Afegir" : "Desar canvis"}
+                  </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         )}
 
         {modalType === "delete" && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-sm text-gray-800">
-              <h2 className="text-xl font-semibold mb-4 text-center">
-                ⚠️ Confirmar eliminació
-              </h2>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-gray-800">
+              <h2 className="text-xl font-semibold mb-4 text-center">⚠️ Confirmar eliminació</h2>
               <p className="text-center">
-                Segur que vols eliminar el producte{" "}
-                <strong>{selectedProduct?.nom}</strong>?
+                Segur que vols eliminar el producte <strong>{selectedProduct?.nom}</strong>?
               </p>
 
               <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded w-full sm:w-auto"
-                >
+                <button onClick={closeModal} className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded w-full sm:w-auto">
                   Cancel·lar
                 </button>
-                <button
-                  onClick={closeModal}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded w-full sm:w-auto"
-                >
+                <button onClick={handleDelete} className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded w-full sm:w-auto">
                   Eliminar
                 </button>
               </div>

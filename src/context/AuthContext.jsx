@@ -31,9 +31,15 @@ export const AuthProvider = ({ children }) => {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Error a l'iniciar sessió");
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Error a l'iniciar sessió");
+      }
 
+      // ✅ Guardar token
       localStorage.setItem("token", data.token);
+      
+      // ✅ Guardar datos de usuario
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -45,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         })
       );
 
+      // ✅ Establecer usuario en estado
       setUser({
         username: data.username,
         fullName: data.fullName,
@@ -54,6 +61,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       return { success: true };
+      
     } catch (error) {
       console.error("Error en l'inici de sessió:", error);
       return { success: false, message: error.message };
@@ -67,11 +75,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => user?.role === "Administrator";
+  
   const getToken = () => localStorage.getItem("token");
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, isAdmin, getToken, isAuthenticated: !!user, loading }}
+      value={{ 
+        user, 
+        login, 
+        logout, 
+        isAdmin, 
+        getToken, 
+        isAuthenticated: !!user, 
+        loading 
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -80,6 +97,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth s'ha d'utilitzar dins d'AuthProvider");
+  if (!context) {
+    throw new Error("useAuth s'ha d'utilitzar dins d'AuthProvider");
+  }
   return context;
 };
