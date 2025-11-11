@@ -1,4 +1,3 @@
-//Missatge visual i confirmació dels canvis
 import { useEffect } from "react";
 
 export default function Toast({ message, type = "success", onClose }) {

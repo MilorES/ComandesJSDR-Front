@@ -3,7 +3,7 @@ import App from "./App";
 import Productes from "./pages/Productes";
 import Dashboard from "./pages/Dashboard";
 import GestioComandes from "./pages/GestioComandes";
-import AdminPanel from "./pages/AdminPanel"; // nueva página para admin
+import AdminPanel from "./pages/AdminPanel"; 
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -23,7 +23,6 @@ const router = createBrowserRouter([
       { path: "productes", element: <Productes /> },
       { path: "gestio-comandes", element: <GestioComandes /> },
 
-      // 🔒 Ruta exclusiva para administradores
       {
         path: "admin",
         element: (

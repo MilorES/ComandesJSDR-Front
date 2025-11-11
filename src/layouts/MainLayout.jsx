@@ -1,4 +1,6 @@
 import { useLocation } from "react-router-dom";
+import CartIcon from "../components/CartIcon";
+import CartSidebar from "../components/CartSidebar";
 
 export default function MainLayout({ children }) {
   const location = useLocation();
@@ -15,14 +17,24 @@ export default function MainLayout({ children }) {
       location.pathname.startsWith(path)
     )?.[1] || "";
 
+  const showCart = location.pathname === "/productes"; 
+
   return (
-    <main className="flex-1 overflow-y-auto">
+    <div className="relative flex-1 overflow-y-auto bg-gray-50 min-h-screen">
       {currentSection && (
-        <h1 className="text-2xl font-semibold text-slate-800 mb-4">
+        <h1 className="text-2xl font-semibold text-slate-800 mb-4 p-4">
           {currentSection}
         </h1>
       )}
-      {children}
-    </main>
+
+      <div className="p-4">{children}</div>
+
+      {showCart && (
+        <>
+          <CartIcon />
+          <CartSidebar />
+        </>
+      )}
+    </div>
   );
 }

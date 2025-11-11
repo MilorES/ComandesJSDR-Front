@@ -36,10 +36,10 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.message || "Error a l'iniciar sessió");
       }
 
-      // ✅ Guardar token
+      // Guardar token
       localStorage.setItem("token", data.token);
       
-      // ✅ Guardar datos de usuario
+      // Guardar datos de usuario
       localStorage.setItem(
         "user",
         JSON.stringify({
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
         })
       );
 
-      // ✅ Establecer usuario en estado
+      // Establecer usuario en estado
       setUser({
         username: data.username,
         fullName: data.fullName,
