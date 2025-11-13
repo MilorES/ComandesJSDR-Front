@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import ProductCard from "./ProductCard";
 
-export default function ProductList() {
+export default function ProductList({ searchTerm = "" }) { // <-- Añadido prop searchTerm
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +12,6 @@ export default function ProductList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Esperar a que AuthContext cargue
         if (authLoading) return;
 
         const token = getToken();
@@ -22,7 +21,6 @@ export default function ProductList() {
           return;
         }
 
-        
         const userData = JSON.parse(localStorage.getItem("user"));
         if (userData?.expiresAt && new Date(userData.expiresAt) < new Date()) {
           logout();
@@ -31,12 +29,9 @@ export default function ProductList() {
           return;
         }
 
-        // Construir URL según rol
         const url = isAdmin()
           ? `${import.meta.env.VITE_API_URL}/articles`
           : `${import.meta.env.VITE_API_URL}/articles?actius=true`;
-
-        console.log("Token usado para fetch:", token);
 
         const response = await fetch(url, {
           headers: {
@@ -66,8 +61,12 @@ export default function ProductList() {
     fetchProducts();
   }, [user, logout, isAdmin, getToken, authLoading]);
 
-  // --- Renderizado ---
+  // --- Filtrado por búsqueda ---
+  const filteredProducts = products.filter((product) =>
+    product.nom.toLowerCase().startsWith(searchTerm.toLowerCase()) // <-- cambio importante
+  );
 
+  // --- Renderizado ---
   if (loading || authLoading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -89,7 +88,7 @@ export default function ProductList() {
     );
   }
 
-  if (products.length === 0) {
+  if (filteredProducts.length === 0) { // <-- ahora usa filteredProducts
     return (
       <div className="p-4">
         <p className="text-gray-600">No hi ha productes disponibles.</p>
@@ -106,7 +105,7 @@ export default function ProductList() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {filteredProducts.map((product) => ( // <-- map sobre filteredProducts
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
