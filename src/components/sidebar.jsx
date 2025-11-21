@@ -93,7 +93,10 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Peu */}
         <div className="p-4 border-t border-blue-700 text-sm text-blue-200">
-          © 2025 ComandesJSDR
+          <div>© 2025 ComandesJSDR </div>
+          <div>
+            v{__APP_VERSION__} {__BUILD_DATE__}
+          </div>
         </div>
       </div>
     </>
