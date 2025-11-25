@@ -19,8 +19,9 @@ export default function Sidebar({ isOpen, onClose }) {
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-gradient-to-b bg-slate-800 text-white flex flex-col transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-          } fixed md:relative h-full z-50`}
+        className={`w-64 bg-gradient-to-b bg-slate-800 text-white flex flex-col transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        } fixed md:relative h-full z-50`}
       >
         {/* Header amb logo */}
         <div className="p-4 border-b border-slate-600 flex items-center justify-between">
@@ -53,19 +54,41 @@ export default function Sidebar({ isOpen, onClose }) {
 
           {/* Només admin */}
           {user?.role === "Administrator" && (
-            <Link
-              to="/admin"
-              className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${location.pathname === "/admin" ? "bg-slate-600 border-l-4 border-yellow-400" : ""
+            <>
+              <Link
+                to="/admin"
+                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+                  location.pathname === "/admin"
+                    ? "bg-slate-600 border-l-4 border-yellow-400"
+                    : ""
                 }`}
-              onClick={onClose}
-            >
-              ⚙️ Administració
-            </Link>
+                onClick={onClose}
+              >
+                ⚙️ Administració
+              </Link>
+
+              {/* 🔵 Nova secció: Gestió Usuaris */}
+              <Link
+                to="/gestio-usuaris"
+                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+                  location.pathname === "/gestio-usuaris"
+                    ? "bg-slate-600 border-l-4 border-yellow-400"
+                    : ""
+                }`}
+                onClick={onClose}
+              >
+                👥 Gestió Usuaris
+              </Link>
+            </>
           )}
+
           <Link
             to="/dashboard"
-            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${location.pathname === "/dashboard" ? "bg-slate-600 border-l-4 border-white" : ""
-              }`}
+            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+              location.pathname === "/dashboard"
+                ? "bg-slate-600 border-l-4 border-white"
+                : ""
+            }`}
             onClick={onClose}
           >
             📊 Dashboard
@@ -73,8 +96,11 @@ export default function Sidebar({ isOpen, onClose }) {
 
           <Link
             to="/productes"
-            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${location.pathname === "/productes" ? "bg-slate-600 border-l-4 border-white" : ""
-              }`}
+            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+              location.pathname === "/productes"
+                ? "bg-slate-600 border-l-4 border-white"
+                : ""
+            }`}
             onClick={onClose}
           >
             📦 Productes
@@ -82,13 +108,15 @@ export default function Sidebar({ isOpen, onClose }) {
 
           <Link
             to="/gestio-comandes"
-            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${location.pathname === "/gestio-comandes" ? "bg-slate-600 border-l-4 border-white" : ""
-              }`}
+            className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+              location.pathname === "/gestio-comandes"
+                ? "bg-slate-600 border-l-4 border-white"
+                : ""
+            }`}
             onClick={onClose}
           >
             📋 Gestió Comandes
           </Link>
-
         </nav>
 
         {/* Peu */}
