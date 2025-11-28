@@ -3,6 +3,10 @@
 FROM node:latest AS builder
 WORKDIR /app
 
+# Build argument per la URL de l'API
+ARG VITE_API_URL=http://localhost:5000/api
+ENV VITE_API_URL=$VITE_API_URL
+
 # Copy package manifests and install dependencies
 COPY package.json package-lock.json* ./
 RUN npm ci --prefer-offline --no-audit --silent
