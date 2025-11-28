@@ -7,6 +7,9 @@ import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+// 🔵 IMPORTAR LA NUEVA PÁGINA
+import GestioUsuaris from "./pages/GestioUsuaris";
+
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
 
@@ -23,11 +26,21 @@ const router = createBrowserRouter([
       { path: "productes", element: <Productes /> },
       { path: "gestio-comandes", element: <GestioComandes /> },
 
+      //Només accès administrador
       {
         path: "admin",
         element: (
           <ProtectedRoute requireAdmin={true}>
             <AdminPanel />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "gestio-usuaris",
+        element: (
+          <ProtectedRoute requireAdmin={true}>
+            <GestioUsuaris />
           </ProtectedRoute>
         ),
       },
