@@ -36,7 +36,7 @@ export default function AboutModal({ isOpen, onClose }) {
         {/* Header */}
         <div className="bg-slate-800 text-white p-6 rounded-t-lg">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">ComandesJSDR</h2>
+            <h2 className="text-2xl font-bold">Quant a</h2>
             <button
               onClick={onClose}
               className="text-white hover:text-gray-300 transition"
@@ -96,7 +96,7 @@ export default function AboutModal({ isOpen, onClose }) {
               </div>
               <div className="flex">
                 <span className="font-medium min-w-[120px]">Grup:</span>
-                <span>Grup 7, Aula 01</span>
+                <span>Grup 7 (Aula 01)</span>
               </div>
               <div className="flex">
                 <span className="font-medium min-w-[120px]">Professora:</span>
