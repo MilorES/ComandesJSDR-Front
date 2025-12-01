@@ -53,7 +53,6 @@ export default function AboutModal({ isOpen, onClose }) {
         <div className="p-6 space-y-6">
           {/* Descripció */}
           <section>
-            <h3 className="text-lg font-semibold text-slate-800 mb-2">Descripció</h3>
             <p className="text-gray-700 leading-relaxed">
               ComandesJSDR és una plataforma que centralitza la gestió de comandes, automatitzant processos que normalment són manuals. Gràcies a XML-UBL, permet interoperabilitat amb altres sistemes i compliment normatiu sense complicacions.
             </p>
