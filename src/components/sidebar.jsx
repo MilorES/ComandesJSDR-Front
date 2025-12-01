@@ -128,10 +128,7 @@ export default function Sidebar({ isOpen, onClose }) {
             onClick={() => setShowAbout(true)}
             className="text-left hover:text-white transition-colors w-full"
           >
-            <div>© 2025 ComandesJSDR</div>
-            <div className="text-xs">
-              v{__APP_VERSION__} {__BUILD_DATE__}
-            </div>
+            <div>© 2025 ComandesJSDR v{__APP_VERSION__}</div>
           </button>
         </div>
       </div>
