@@ -1,10 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 import logo from "../assets/logo3.png";
 import { useAuth } from "../context/AuthContext";
+import AboutModal from "./AboutModal";
 
 export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const { user } = useAuth();
+  const [showAbout, setShowAbout] = useState(false);
 
   return (
     <>
@@ -121,12 +124,19 @@ export default function Sidebar({ isOpen, onClose }) {
 
         {/* Peu */}
         <div className="p-4 border-t border-blue-700 text-sm text-blue-200">
-          <div>© 2025 ComandesJSDR </div>
-          <div>
-            v{__APP_VERSION__} {__BUILD_DATE__}
-          </div>
+          <button
+            onClick={() => setShowAbout(true)}
+            className="text-left hover:text-white transition-colors w-full"
+          >
+            <div>© 2025 ComandesJSDR</div>
+            <div className="text-xs">
+              v{__APP_VERSION__} {__BUILD_DATE__}
+            </div>
+          </button>
         </div>
       </div>
+
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </>
   );
 }
