@@ -4,7 +4,6 @@ import MainLayout from "../layouts/MainLayout";
 import Toast from "../components/Toast";
 import { getEstatText, getEstatColor, EstatComanda } from "../utils/estatComanda";
 
-// Icono de Descargar (XML)
 const DownloadIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +21,6 @@ const DownloadIcon = () => (
   </svg>
 );
 
-// Icono de búsqueda
 const SearchIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 2048 2048" className="w-5 h-5 text-gray-400">
     <defs><style>{`.fil1,.fil3{fill:#003761;fill-rule:nonzero}.fil1{fill:#01579b}`}</style></defs>
@@ -39,7 +37,6 @@ export default function GestioComandes() {
   const [toast, setToast] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
 
-  // Estados para filtros
   const [searchTerm, setSearchTerm] = useState("");
   const [estatFilter, setEstatFilter] = useState("");
 
@@ -85,18 +82,15 @@ export default function GestioComandes() {
     fetchComandes();
   }, []);
 
-  // Aplicar filtros cuando cambien searchTerm o estatFilter
   useEffect(() => {
     let filtered = [...comandes];
 
-    // Filtrar por término de búsqueda (número de comanda)
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((c) =>
         c.numeroComanda.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Filtrar por estado
     if (estatFilter !== "") {
       const estatNum = parseInt(estatFilter);
       filtered = filtered.filter((c) => c.estat === estatNum);
@@ -178,9 +172,7 @@ export default function GestioComandes() {
 
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-[99%] md:w-full max-w-[1700px] flex flex-col space-y-6">
-          <h1 className="text-3xl font-bold text-gray-800">Gestió de Comandes</h1>
           
-          {/* --- FILTROS (Mantiene estilos de tarjeta redondeada) --- */}
           <div className="flex flex-col md:flex-row gap-4 items-end bg-white p-4 rounded-xl shadow-md border border-gray-200">
             <div className="flex-1 max-w-lg w-full">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -234,13 +226,9 @@ export default function GestioComandes() {
               </div>
             )}
           </div>
-          {/* --- FIN FILTROS --- */}
 
-          {/* --- TABLA DE COMANDAS --- */}
-          {/* Contenedor principal con esquinas redondeadas (rounded-xl) */}
           <div className="bg-white shadow-lg rounded-xl border border-gray-200 p-0 overflow-x-auto">
             
-            {/* Título/Conteo */}
             <div className="px-4 pt-4 text-sm text-gray-600">
               {filteredComandes.length === comandes.length ? (
                 <span>Total: <strong>{comandes.length}</strong> comandes</span>
@@ -252,7 +240,6 @@ export default function GestioComandes() {
             </div>
 
             {filteredComandes.length === 0 ? (
-              // Contenido de "sin resultados"
               <div className="text-center py-12">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -276,7 +263,6 @@ export default function GestioComandes() {
               </div>
             ) : (
               <table className="w-full border-collapse mt-2">
-                {/* Cabecera con rounded-t-xl para las esquinas superiores */}
                 <thead className="bg-slate-800 text-white rounded-t-xl">
                   <tr>
                     <th className="py-3 px-4 text-left w-[150px] rounded-tl-xl">Número</th>
@@ -315,7 +301,7 @@ export default function GestioComandes() {
                         <td className="py-3 px-4 text-center w-[60px]">
                           <button
                             onClick={(e) => {
-                              e.stopPropagation(); // Evita que se colapse/expanda la fila
+                              e.stopPropagation(); 
                               downloadXmlUbl(comanda.id, comanda.numeroComanda);
                             }}
                             className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600"
@@ -330,7 +316,6 @@ export default function GestioComandes() {
                           <td colSpan={5} className="bg-gray-50 p-4">
                             <h4 className="font-bold text-gray-700 mb-2">Detall de la comanda:</h4>
                             <div className="overflow-x-auto">
-                              {/* Esta tabla interna también se redondea */}
                               <table className="min-w-full text-sm bg-white border border-gray-200 rounded-lg shadow-sm">
                                 <thead>
                                   <tr className="bg-gray-200 text-gray-700">
@@ -359,7 +344,6 @@ export default function GestioComandes() {
               </table>
             )}
           </div>
-          {/* --- FIN TABLA DE COMANDAS --- */}
         </div>
       </div>
     </MainLayout>
