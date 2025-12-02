@@ -4,11 +4,10 @@ import Productes from "./pages/Productes";
 import Dashboard from "./pages/Dashboard";
 import GestioComandes from "./pages/GestioComandes";
 import AdminPanel from "./pages/AdminPanel"; 
+import GestioUsuaris from "./pages/GestioUsuaris";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// 🔵 IMPORTAR LA NUEVA PÁGINA
-import GestioUsuaris from "./pages/GestioUsuaris";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },

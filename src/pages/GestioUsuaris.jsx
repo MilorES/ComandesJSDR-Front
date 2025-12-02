@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import UsuarisTable from "../components/gestio-usuaris/UsuarisTable";
 import UsuariForm from "../components/gestio-usuaris/UsuariForm";
 import Toast from "../components/Toast";
+import MainLayout from "../layouts/MainLayout"; 
 
 export default function GestioUsuaris() {
   const { getToken, logout } = useAuth();
@@ -54,7 +55,6 @@ export default function GestioUsuaris() {
     try {
       const token = getToken();
       
-      // Preparar los datos según si es crear o editar
       let url, method, body;
 
       if (editingUser) {
@@ -149,42 +149,40 @@ export default function GestioUsuaris() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregant usuaris...</p>
+      <MainLayout> {/* Envuelto en MainLayout */}
+        <div className="flex items-center justify-center p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Carregant usuaris...</p>
+          </div>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
   return (
-    <div className="flex flex-col p-6 space-y-8">
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
+    <MainLayout> {/* Envuelto en MainLayout para el título */}
+      <div className="flex flex-col space-y-8"> 
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
+
+        <UsuariForm
+          initialData={editingUser}
+          onCancel={handleCancel}
+          onSave={handleSave}
         />
-      )}
 
-      <h1 className="text-3xl font-semibold text-left text-gray-800">
-        Gestió d'Usuaris
-      </h1>
-
-      {/* FORMULARIO ARRIBA - Ancho completo */}
-      <UsuariForm
-        initialData={editingUser}
-        onCancel={handleCancel}
-        onSave={handleSave}
-      />
-
-      {/* TABLA ABAJO - Ancho completo */}
-      <UsuarisTable
-        usuaris={usuaris}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+        <UsuarisTable
+          usuaris={usuaris}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </div>
+    </MainLayout>
   );
 }

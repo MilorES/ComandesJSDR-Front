@@ -15,9 +15,11 @@ export default function App() {
       <Sidebar isOpen={menuOpen} onClose={closeMenu} />
       <div className="flex-1 flex flex-col bg-gray-100">
         <Header onToggleMenu={toggleMenu} />
-        <div className="flex-1 p-5 md:p-8 bg-white overflow-auto">
+
+        <div className="flex-1 p-5 md:p-8 bg-white overflow-y-auto">
           <Outlet />
         </div>
+
       </div>
     </div>
   );

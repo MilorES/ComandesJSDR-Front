@@ -13,10 +13,10 @@ export default function ProductCard({ product }) {
       </p>
       <div className="space-y-2 mb-4">
         <p className="text-2xl font-semibold text-green-600">
-          💰 {product?.preu !== undefined ? product.preu.toFixed(2) : "N/A"} €
+           {product?.preu !== undefined ? product.preu.toFixed(2) : "N/A"} €
         </p>
         <p className="text-gray-700">
-          📦 Estoc: <span className="font-medium">{product?.estoc ?? "N/A"}</span>
+           Estoc: <span className="font-medium">{product?.estoc ?? "N/A"}</span>
         </p>
         <p
           className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${

@@ -6,7 +6,8 @@ export default function MainLayout({ children }) {
   const location = useLocation();
 
   const sectionNames = {
-    "/admin": "Panell d'Administració",
+    "/admin": "Gestió Productes",
+    "/gestio-usuaris": "Gestió d'Usuaris", 
     "/dashboard": "Dashboard",
     "/productes": "Productes",
     "/gestio-comandes": "Gestió de Comandes",
@@ -17,7 +18,7 @@ export default function MainLayout({ children }) {
       location.pathname.startsWith(path)
     )?.[1] || "";
 
-  const showCart = location.pathname === "/productes"; 
+  const showCart = location.pathname === "/productes";
 
   return (
     <div className="relative flex-1 overflow-y-auto bg-gray-50 min-h-screen">

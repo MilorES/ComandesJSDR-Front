@@ -55,7 +55,7 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* USERNAME */}
+
         <div>
           <label className="block mb-2 font-medium text-gray-700">
             Nom d'usuari <span className="text-red-500">*</span>
@@ -77,7 +77,6 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
           )}
         </div>
 
-        {/* PASSWORD */}
         <div>
           <label className="block mb-2 font-medium text-gray-700">
             Contrasenya <span className="text-red-500">*</span>
@@ -92,7 +91,6 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
           />
         </div>
 
-        {/* ROL */}
         <div>
           <label className="block mb-2 font-medium text-gray-700">
             Rol <span className="text-red-500">*</span>
@@ -121,7 +119,7 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
 
         <button
           onClick={handleSubmit}
-          className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium shadow-md hover:shadow-lg"
+          className="px-6 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium shadow-md hover:shadow-lg"
         >
           {initialData ? "Actualitzar" : "Crear"}
         </button>
