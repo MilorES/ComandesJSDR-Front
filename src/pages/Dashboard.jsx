@@ -28,7 +28,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/comandes/resum`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/comandes/resum`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/comandes/mensual?mesos=12`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/comandes/mensual?mesos=12`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/productes/resum`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/productes/resum`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/productes/novetats?limit=5`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/productes/novetats?limit=5`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -150,7 +150,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/productes/baix-stock?quantitat=10`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/productes/baix-stock?quantitat=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -187,7 +187,7 @@ export default function Dashboard() {
     try {
       const token = getToken();
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/dashboard/productes/baix-stock?quantitat=10`,
+        `${import.meta.env.VITE_API_URL}/Dashboard/productes/baix-stock?quantitat=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
