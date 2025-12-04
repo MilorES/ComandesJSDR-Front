@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import AboutModal from '../components/AboutModal';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function Login() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -106,7 +108,22 @@ export default function Login() {
           <p><strong>User:</strong> usuari / ComandesJSDR</p>
         </div>
 
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setShowAbout(true)}
+            className="text-sm text-gray-500 hover:text-gray-700 transition"
+          >            
+            <div>
+              <p><strong>Informació del projecte</strong></p>
+              <p>© 2025 ComandesJSDR v{__APP_VERSION__}</p>
+            </div>
+          </button>
+        </div>
+        
+
       </div>
+
+      <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
     </div>
   );
 }
