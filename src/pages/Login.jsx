@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AboutModal from '../components/AboutModal';
+import ManualModal from '../components/ManualModal';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [showManual, setShowManual] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -119,11 +121,21 @@ export default function Login() {
             </div>
           </button>
         </div>
+
+        <div className="mt-2 text-center">
+          <button
+            onClick={() => setShowManual(true)}
+            className="text-sm text-gray-500 hover:text-gray-700 transition"
+          >
+            <p><strong>Manual d&apos;usuari</strong></p>
+          </button>
+        </div>
         
 
       </div>
 
       <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
+      <ManualModal isOpen={showManual} onClose={() => setShowManual(false)} />
     </div>
   );
 }

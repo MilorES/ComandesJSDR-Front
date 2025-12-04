@@ -3,6 +3,7 @@ import { useState } from "react";
 import logo from "../assets/logo3.png";
 import { useAuth } from "../context/AuthContext";
 import AboutModal from "./AboutModal";
+import ManualModal from "./ManualModal";
 
 const GestioProductesIcon = () => (
   <svg className="w-6 h-6 inline-block mr-2" viewBox="0 0 2048 2048" xmlns="http://www.w3.org/2000/svg">
@@ -59,6 +60,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const location = useLocation();
   const { user } = useAuth();
   const [showAbout, setShowAbout] = useState(false);
+  const [showManual, setShowManual] = useState(false);
 
   return (
     <>
@@ -172,17 +174,24 @@ export default function Sidebar({ isOpen, onClose }) {
         </nav>
 
         {/* Peu */}
-        <div className="p-4 border-t border-blue-700 text-sm text-blue-200">
+        <div className="p-4 border-t border-blue-700 text-sm text-blue-200 space-y-2">
           <button
             onClick={() => setShowAbout(true)}
             className="text-left hover:text-white transition-colors w-full"
           >
             <div>© 2025 ComandesJSDR v{__APP_VERSION__}</div>
           </button>
+          <button
+            onClick={() => setShowManual(true)}
+            className="text-left hover:text-white transition-colors w-full flex items-center gap-2"
+          >
+            <span>Manual d&apos;usuari</span>
+          </button>
         </div>
       </div>
 
       <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
+      <ManualModal isOpen={showManual} onClose={() => setShowManual(false)} />
     </>
   );
 }
