@@ -23,9 +23,13 @@ export default function ManualModal({ isOpen, onClose }) {
   }, [isOpen]);
 
   const handleDownloadPDF = () => {
+    const version = typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '';
+    const filename = version
+      ? `Manual-Usuari-ComandesJSDR-v${version}.pdf`
+      : "Manual-Usuari-ComandesJSDR.pdf";
     const link = document.createElement("a");
     link.href = "/docs/manual-usuari.pdf";
-    link.download = "Manual-Usuari-ComandesJSDR.pdf";
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
