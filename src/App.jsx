@@ -13,7 +13,7 @@ export default function App() {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar isOpen={menuOpen} onClose={closeMenu} />
-      <div className="flex-1 flex flex-col bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gray-100 overflow-x-hidden **min-w-0**">
         <Header onToggleMenu={toggleMenu} />
 
         <div className="flex-1 p-5 md:p-8 bg-white overflow-y-auto">

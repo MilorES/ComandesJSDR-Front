@@ -6,7 +6,6 @@ export default function Productes() {
     <MainLayout>
       <div className="p-4 sm:p-6 flex justify-center">
         <div className="w-[99%] md:w-full max-w-[1700px] flex flex-col space-y-6">
-          {/* Lista de productos con filtro y lupa dentro */}
           <ProductList />
         </div>
       </div>

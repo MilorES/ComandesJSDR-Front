@@ -75,7 +75,7 @@ export default function Sidebar({ isOpen, onClose }) {
       <div
         className={`w-64 bg-gradient-to-b bg-slate-800 text-white flex flex-col transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        } fixed md:relative h-full z-50`}
+        } fixed md:relative min-h-screen z-50 **flex-shrink-0**`}
       >
         <div className="p-4 border-b border-slate-600 flex items-center justify-between">
           <div className="flex-1 flex justify-center">
@@ -103,35 +103,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         <nav className="flex-1 py-6">
-          {user?.role === "Administrator" && (
-            <>
-              <Link
-                to="/admin"
-                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
-                  location.pathname === "/admin"
-                    ? "bg-slate-600 border-l-4 border-yellow-400"
-                    : ""
-                }`}
-                onClick={onClose}
-              >
-                <GestioProductesIcon />
-                Gestió Productes
-              </Link>
-
-              <Link
-                to="/gestio-usuaris"
-                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
-                  location.pathname === "/gestio-usuaris"
-                    ? "bg-slate-600 border-l-4 border-yellow-400"
-                    : ""
-                }`}
-                onClick={onClose}
-              >
-                <GestioUsuarisIcon />
-                Gestió Usuaris
-              </Link>
-            </>
-          )}
+          
 
           <Link
             to="/dashboard"
@@ -171,6 +143,36 @@ export default function Sidebar({ isOpen, onClose }) {
             <GestioComandesIcon />
             Gestió Comandes
           </Link>
+
+          {user?.role === "Administrator" && (
+            <>
+              <Link
+                to="/admin"
+                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+                  location.pathname === "/admin"
+                    ? "bg-slate-600 border-l-4 border-yellow-400"
+                    : ""
+                }`}
+                onClick={onClose}
+              >
+                <GestioProductesIcon />
+                Gestió Productes
+              </Link>
+
+              <Link
+                to="/gestio-usuaris"
+                className={`block px-6 py-3 text-lg font-medium transition-colors hover:bg-slate-500 ${
+                  location.pathname === "/gestio-usuaris"
+                    ? "bg-slate-600 border-l-4 border-yellow-400"
+                    : ""
+                }`}
+                onClick={onClose}
+              >
+                <GestioUsuarisIcon />
+                Gestió Usuaris
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* Peu */}

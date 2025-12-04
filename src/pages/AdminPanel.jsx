@@ -44,6 +44,8 @@ const DeleteIcon = () => (
 export default function AdminPanel() {
   const { getToken, logout } = useAuth();
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); 
+  const [selectedCategory, setSelectedCategory] = useState(""); 
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalType, setModalType] = useState(null);
@@ -58,12 +60,37 @@ export default function AdminPanel() {
   });
   const [formErrors, setFormErrors] = useState({});
 
+  // Carregar CATEGORIES des de l'API
+  const fetchCategories = async () => {
+    try {
+      const token = getToken();
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/articles/categories`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status} al carregar categories`);
+      }
+
+      const data = await response.json();
+      setCategories(data);
+    } catch (error) {
+      showToast(error.message || "Error al carregar categories", "error");
+    }
+  };
+
   // Carregar productes des de l'API
-  const fetchProducts = async () => {
+  const fetchProducts = async (category = "") => {
     try {
       setLoading(true);
       const token = getToken();
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/articles`, {
+
+      const url = `${import.meta.env.VITE_API_URL}/articles${category ? `?categoria=${encodeURIComponent(category)}` : ""}`;
+
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -89,7 +116,15 @@ export default function AdminPanel() {
 
   useEffect(() => {
     fetchProducts();
+    fetchCategories();
   }, []);
+
+  
+  const handleCategoryChange = (e) => {
+    const newCategory = e.target.value;
+    setSelectedCategory(newCategory);
+    fetchProducts(newCategory);
+  };
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -115,7 +150,7 @@ export default function AdminPanel() {
         descripcio: "",
         preu: "",
         estoc: "",
-        categoria: "",
+        categoria: "", 
         actiu: true
       });
     }
@@ -153,12 +188,14 @@ export default function AdminPanel() {
       errors.nom = "El nom és obligatori";
     }
 
-    if (!formData.preu || parseFloat(formData.preu) <= 0) {
+    const parsedPreu = parseFloat(formData.preu);
+    if (isNaN(parsedPreu) || parsedPreu <= 0) {
       errors.preu = "El preu ha de ser superior a 0";
     }
 
-    if (formData.estoc === "" || parseInt(formData.estoc) < 0) {
-      errors.estoc = "L'estoc no pot ser negatiu";
+    const parsedEstoc = parseInt(formData.estoc, 10);
+    if (isNaN(parsedEstoc) || parsedEstoc < 0) {
+      errors.estoc = "L'estoc ha de ser un número sencer positiu o zero";
     }
 
     setFormErrors(errors);
@@ -216,6 +253,7 @@ export default function AdminPanel() {
       showToast("Canvis aplicats correctament", "success");
       closeModal();
       await fetchProducts();
+      await fetchCategories();
     } catch (error) {
       showToast(error.message, "error");
     }
@@ -250,6 +288,7 @@ export default function AdminPanel() {
       showToast("Producte eliminat correctament", "success");
       closeModal();
       await fetchProducts();
+      await fetchCategories(); // Recarregar categories per si la categoria eliminada ja no té productes
     } catch (error) {
       showToast(error.message, "error");
     }
@@ -263,6 +302,13 @@ export default function AdminPanel() {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
             <p className="mt-4 text-gray-600">Carregant productes...</p>
           </div>
+          {toast && (
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              onClose={() => setToast(null)}
+            />
+          )}
         </div>
       </MainLayout>
     );
@@ -270,7 +316,7 @@ export default function AdminPanel() {
 
   return (
     <MainLayout>
-      <div className="p-4 md:p-8 text-white">
+      <div className="p-4 md:p-8">
         {toast && (
           <Toast
             message={toast.message}
@@ -279,10 +325,26 @@ export default function AdminPanel() {
           />
         )}
 
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          
+          <div className="w-full sm:w-1/3"> 
+            <label htmlFor="category-filter" className="block text-sm font-medium text-gray-800 mb-1">Filtrar per Categoria:</label>
+            <select
+              id="category-filter"
+              value={selectedCategory}
+              onChange={handleCategoryChange}
+              className="w-full border border-gray-300 rounded-lg p-2 text-gray-800 bg-white"
+            >
+              <option value="">Totes les categories</option>
+              {categories.map((cat, index) => (
+                <option key={index} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          
           <button
             onClick={() => openModal("add")}
-            className="bg-green-600 hover:bg-green-700 px-3 py-2 text-sm rounded-lg font-semibold w-auto self-end sm:px-4 sm:text-base sm:self-auto text-center"
+            className="bg-green-600 hover:bg-green-700 px-3 py-2 text-sm rounded-lg font-semibold w-full sm:w-auto sm:px-4 sm:text-base text-center text-white mt-auto"
           >
             + Afegir producte
           </button>
@@ -352,7 +414,7 @@ export default function AdminPanel() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg text-gray-800 max-h-[90vh] overflow-y-auto">
               <h2 className="text-2xl font-bold mb-4 text-center">
-                {modalType === "add" ? "🆕 Afegir producte" : "Editar producte"}
+                {modalType === "add" ? "Afegir producte" : "Editar producte"}
               </h2>
 
               <div className="space-y-4">
@@ -381,14 +443,19 @@ export default function AdminPanel() {
 
                 <div>
                   <label className="block font-medium mb-1">Categoria</label>
-                  <input
-                    type="text"
+                  <select
                     name="categoria"
                     value={formData.categoria}
                     onChange={handleInputChange}
                     className="w-full border border-gray-300 rounded p-2"
-                    placeholder="Ex: Informàtica, Electrònica..."
-                  />
+                  >
+                    <option value="">Elegeix la categoria</option>
+                    {categories.map((cat, index) => (
+                      <option key={index} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

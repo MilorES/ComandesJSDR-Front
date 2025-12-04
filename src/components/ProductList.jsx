@@ -159,7 +159,6 @@ export default function ProductList({ searchTerm = "" }) {
 
   return (
     <div className="space-y-6">
-      {/* Barra de búsqueda y filtros */}
       <div className="flex flex-col md:flex-row gap-4 items-end bg-white p-4 rounded-xl shadow-md border border-gray-200">
         <div className="flex-1 max-w-lg w-full">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -213,7 +212,6 @@ export default function ProductList({ searchTerm = "" }) {
         )}
       </div>
 
-      {/* Contador de productos */}
       <div className="px-2 text-sm text-gray-600">
         {filteredProducts.length === products.length ? (
           <span>Total: <strong>{products.length}</strong> productes</span>
@@ -224,7 +222,6 @@ export default function ProductList({ searchTerm = "" }) {
         )}
       </div>
 
-      {/* Lista de productos */}
       {filteredProducts.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-xl shadow-md border border-gray-200">
           <svg

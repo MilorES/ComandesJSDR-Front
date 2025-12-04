@@ -85,7 +85,6 @@ export default function GestioComandes() {
   useEffect(() => {
     let filtered = [...comandes];
 
-    // ✅ CORREGIDO: Buscar comandes que EMPIECEN por el término buscado
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((c) =>
         c.numeroComanda.toLowerCase().startsWith(searchTerm.toLowerCase())

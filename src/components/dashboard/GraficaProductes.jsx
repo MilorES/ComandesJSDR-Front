@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recha
 export default function GraficaProductes({ data }) {
   if (!data) {
     return (
-      <div className="bg-white p-6 rounded shadow h-[400px] flex items-center justify-center">
+      <div className="bg-white p-2 md:p-6 rounded-lg shadow h-[400px] flex items-center justify-center">
         <p className="text-gray-500">Carregant gràfica...</p>
       </div>
     );
@@ -23,10 +23,10 @@ export default function GraficaProductes({ data }) {
   ];
 
   return (
-    <div className="bg-white p-6 rounded shadow">
-      <h3 className="text-xl font-semibold mb-4">Estats dels Productes</h3>
+    <div className="bg-white p-2 md:p-6 rounded-lg shadow">
+      <h3 className="text-lg md:text-xl font-semibold mb-4">Estats dels Productes</h3>
 
-      <div className="mb-4 text-sm text-gray-600">
+      <div className="mb-4 text-xs md:text-sm text-gray-600">
         <strong>Total Productes:</strong> {data.totalProductes || 0}
       </div>
 
@@ -45,15 +45,16 @@ export default function GraficaProductes({ data }) {
               cy="50%"
               outerRadius={100}
               label={({ name, percent }) =>
-                `${name}: ${(percent * 100).toFixed(0)}%`
+                `${(percent * 100).toFixed(0)}%`
               }
+              labelLine={false}
             >
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
             <Tooltip />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: '12px' }} />
           </PieChart>
         </ResponsiveContainer>
       )}

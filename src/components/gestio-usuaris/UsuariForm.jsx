@@ -6,13 +6,14 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
     password: "",
     role: "User",
   });
+  // Nuevo estado para gestionar los errores de validación sin usar alert()
+  const [error, setError] = useState(null);
 
-  // Actualizar formulario cuando cambie initialData
   useEffect(() => {
     if (initialData) {
       setForm({
         username: initialData.username || "",
-        password: "",
+        password: "", // La contraseña siempre se inicializa vacía
         role: initialData.role || "User",
       });
     } else {
@@ -22,6 +23,7 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
         role: "User",
       });
     }
+    setError(null); // Limpiar errores al cambiar de usuario/modo
   }, [initialData]);
 
   const handleChange = (e) => {
@@ -29,30 +31,43 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
   };
 
   const handleSubmit = () => {
+    setError(null);
+    let validationError = null;
+
     // Validar campos obligatorios
     if (!form.username && !initialData) {
-      alert("El nom d'usuari és obligatori");
-      return;
+      validationError = "El nom d'usuari és obligatori";
+    } else if (!form.password && !initialData) {
+      validationError = "La contrasenya és obligatòria";
+    } else if (!form.role) {
+      validationError = "El rol és obligatori";
     }
 
-    if (!form.password && !initialData) {
-      alert("La contrasenya és obligatòria");
-      return;
-    }
-
-    if (!form.role) {
-      alert("El rol és obligatori");
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     onSave(form);
   };
 
+  // Eliminamos containerClasses, ya que el Modal se encarga del fondo y la sombra
+  const isCreating = !initialData;
+
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
-      <h3 className="text-xl font-semibold mb-6 text-gray-800">
-        {initialData ? "Editar usuari" : "Crear nou usuari"}
-      </h3>
+    <div className="p-1"> {/* Contenedor simple */}
+
+      {/* Mensaje de error (Reemplazo de alert) */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
+          <span className="block sm:inline">{error}</span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onClick={() => setError(null)}>
+            <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Tancar</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.03a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15L5.651 7.689a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.03a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.15 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" /></svg>
+          </span>
+        </div>
+      )}
+
+      {/* Eliminamos el título "Editar usuari" ya que el Modal lo proporciona */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -65,9 +80,8 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
             value={form.username}
             onChange={handleChange}
             disabled={!!initialData}
-            className={`w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
-              initialData ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""
-            }`}
+            className={`w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${initialData ? "bg-gray-100 cursor-not-allowed text-gray-500" : ""
+              }`}
             placeholder="usuari123"
           />
           {initialData && (
@@ -108,14 +122,12 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
       </div>
 
       <div className="mt-6 flex justify-end space-x-3">
-        {initialData && (
-          <button
-            onClick={onCancel}
-            className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium"
-          >
-            Cancel·lar
-          </button>
-        )}
+        <button
+          onClick={onCancel}
+          className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium"
+        >
+          Cancel·lar
+        </button>
 
         <button
           onClick={handleSubmit}

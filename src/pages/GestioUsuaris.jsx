@@ -3,7 +3,9 @@ import { useAuth } from "../context/AuthContext";
 import UsuarisTable from "../components/gestio-usuaris/UsuarisTable";
 import UsuariForm from "../components/gestio-usuaris/UsuariForm";
 import Toast from "../components/Toast";
-import MainLayout from "../layouts/MainLayout"; 
+import MainLayout from "../layouts/MainLayout";
+import Modal from "../components/gestio-usuaris/ModalUsuari";
+import ModalConfirmacio from "../components/gestio-usuaris/ModalConfirmacio";
 
 export default function GestioUsuaris() {
   const { getToken, logout } = useAuth();
@@ -11,12 +13,24 @@ export default function GestioUsuaris() {
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Estado para el modal de confirmación de eliminación
+  const [deletingUser, setDeletingUser] = useState(null);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
   };
 
-  // Obtener todos los usuarios
+  const handleOpenModal = () => {
+    setEditingUser(null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   const fetchUsuaris = async () => {
     try {
       setLoading(true);
@@ -50,23 +64,21 @@ export default function GestioUsuaris() {
     fetchUsuaris();
   }, []);
 
-  // Guardar usuario (crear o editar)
   const handleSave = async (formData) => {
     try {
       const token = getToken();
-      
+
       let url, method, body;
 
       if (editingUser) {
-        // EDITAR usuario existente - Solo enviar rol
         url = `${import.meta.env.VITE_API_URL}/users/${editingUser.id}`;
         method = "PUT";
         body = JSON.stringify({
           role: formData.role,
           isEnabled: true,
+          ...(formData.password && { password: formData.password }),
         });
       } else {
-        // CREAR nuevo usuario - Solo username, password y role
         url = `${import.meta.env.VITE_API_URL}/users`;
         method = "POST";
         body = JSON.stringify({
@@ -96,25 +108,29 @@ export default function GestioUsuaris() {
         editingUser ? "Usuari actualitzat correctament" : "Usuari creat correctament",
         "success"
       );
-      
+
       setEditingUser(null);
+      handleCloseModal();
       fetchUsuaris();
     } catch (error) {
       showToast(error.message || "Error al guardar usuari", "error");
     }
   };
 
-  // Eliminar usuario
-  const handleDelete = async (user) => {
-    if (!confirm(`Estàs segur que vols eliminar l'usuari "${user.username}"?`)) {
-      return;
-    }
+  // Abrir modal de confirmación de eliminación
+  const handleDeleteClick = (user) => {
+    setDeletingUser(user);
+  };
+
+  // Confirmar eliminación
+  const handleConfirmDelete = async () => {
+    if (!deletingUser) return;
 
     try {
       const token = getToken();
 
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/users/${user.id}`,
+        `${import.meta.env.VITE_API_URL}/users/${deletingUser.id}`,
         {
           method: "DELETE",
           headers: {
@@ -134,22 +150,23 @@ export default function GestioUsuaris() {
       fetchUsuaris();
     } catch (error) {
       showToast(error.message || "Error al eliminar usuari", "error");
+    } finally {
+      setDeletingUser(null);
     }
   };
 
-  // Editar usuario
   const handleEdit = (user) => {
     setEditingUser(user);
+    setIsModalOpen(false);
   };
 
-  // Cancelar edición
   const handleCancel = () => {
     setEditingUser(null);
   };
 
   if (loading) {
     return (
-      <MainLayout> {/* Envuelto en MainLayout */}
+      <MainLayout>
         <div className="flex items-center justify-center p-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
@@ -161,8 +178,8 @@ export default function GestioUsuaris() {
   }
 
   return (
-    <MainLayout> {/* Envuelto en MainLayout para el título */}
-      <div className="flex flex-col space-y-8"> 
+    <MainLayout>
+      <div className="flex flex-col space-y-8">
         {toast && (
           <Toast
             message={toast.message}
@@ -171,16 +188,52 @@ export default function GestioUsuaris() {
           />
         )}
 
-        <UsuariForm
-          initialData={editingUser}
-          onCancel={handleCancel}
-          onSave={handleSave}
+        <div className="flex justify-start">
+          <button
+            onClick={handleOpenModal}
+            className="px-6 py-2 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition"
+          >
+            + Crear Usuari
+          </button>
+        </div>
+
+        <Modal isOpen={isModalOpen && !editingUser} onClose={handleCloseModal} title="Crear Nou Usuari">
+          <UsuariForm
+            initialData={null}
+            onCancel={handleCloseModal}
+            onSave={handleSave}
+          />
+        </Modal>
+
+        <Modal
+          isOpen={!!editingUser}
+          onClose={handleCancel}
+          title={`Editar Usuari: ${editingUser?.username || 'Càrrega...'}`}
+        >
+          {editingUser && (
+            <UsuariForm
+              initialData={editingUser}
+              onCancel={handleCancel}
+              onSave={handleSave}
+            />
+          )}
+        </Modal>
+
+        <ModalConfirmacio
+          isOpen={!!deletingUser}
+          onClose={() => setDeletingUser(null)}
+          onConfirm={handleConfirmDelete}
+          title="Eliminar Usuari"
+          message={`Estàs segur que vols eliminar l'usuari "${deletingUser?.username}"? Aquesta acció no es pot desfer.`}
+          confirmText="Eliminar"
+          cancelText="Cancel·lar"
+          type="danger"
         />
 
         <UsuarisTable
           usuaris={usuaris}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={handleDeleteClick}
         />
       </div>
     </MainLayout>

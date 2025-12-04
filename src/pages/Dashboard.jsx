@@ -5,6 +5,7 @@ import TripleCardGrid from "../components/dashboard/TripleCardGrid";
 import GraficaComandes from "../components/dashboard/GraficaComandes";
 import GraficaProductes from "../components/dashboard/GraficaProductes";
 import Toast from "../components/Toast";
+import MainLayout from "../layouts/MainLayout";
 
 export default function Dashboard() {
   const { user, isAdmin, getToken, logout } = useAuth();
@@ -23,7 +24,7 @@ export default function Dashboard() {
     setToast({ message, type });
   };
 
-  // Obtener resumen de comandas (para TODOS)
+  
   const fetchResumComandes = async () => {
     try {
       const token = getToken();
@@ -52,7 +53,7 @@ export default function Dashboard() {
     }
   };
 
-  // Obtener comandas mensuales (para TODOS - el backend filtra automáticamente)
+  
   const fetchComandesMensuals = async () => {
     try {
       const token = getToken();
@@ -81,7 +82,7 @@ export default function Dashboard() {
     }
   };
 
-  // Obtener resumen de productos (SOLO admin)
+  // (SOLO admin)
   const fetchResumProductes = async () => {
     if (!isAdmin()) return;
 
@@ -112,10 +113,8 @@ export default function Dashboard() {
     }
   };
 
-  // Obtener novedades (SOLO admin)
   const fetchNovetats = async () => {
-    if (!isAdmin()) return;
-
+    
     try {
       const token = getToken();
       const response = await fetch(
@@ -143,10 +142,8 @@ export default function Dashboard() {
     }
   };
 
-  // Obtener productos con bajo stock (SOLO admin) - Stock entre 1 y 10
   const fetchUltimsStocks = async () => {
-    if (!isAdmin()) return;
-
+    
     try {
       const token = getToken();
       const response = await fetch(
@@ -170,7 +167,6 @@ export default function Dashboard() {
       const data = await response.json();
       console.log("Resposta baix-stock (<=10):", data);
       
-      // Filtrar: solo productos con stock MAYOR a 0 (para "Últims Stocks")
       const productsWithLowStock = data.filter(p => p.estoc > 0);
       console.log("Últims Stocks (estoc > 0):", productsWithLowStock);
       setUltimsStocks(productsWithLowStock);
@@ -180,9 +176,8 @@ export default function Dashboard() {
     }
   };
 
-  // Obtener productos SIN stock (sobre petició) - Stock = 0 (SOLO admin)
   const fetchSobrePeticio = async () => {
-    if (!isAdmin()) return;
+    
 
     try {
       const token = getToken();
@@ -207,7 +202,6 @@ export default function Dashboard() {
       const data = await response.json();
       console.log("Resposta baix-stock per sobre petició:", data);
       
-      // Filtrar: solo productos con stock IGUAL a 0 (para "Sobre petició")
       const productsWithoutStock = data.filter(p => p.estoc === 0);
       console.log("Sobre petició (estoc === 0):", productsWithoutStock);
       setSobrePeticio(productsWithoutStock);
@@ -222,7 +216,7 @@ export default function Dashboard() {
       setLoading(true);
       await Promise.all([
         fetchResumComandes(),
-        fetchComandesMensuals(), // Para TODOS (backend filtra automáticamente)
+        fetchComandesMensuals(), 
         fetchResumProductes(),
         fetchNovetats(),
         fetchUltimsStocks(),
@@ -244,6 +238,7 @@ export default function Dashboard() {
   }
 
   return (
+    <MainLayout>
     <div className="p-6 space-y-10">
       {toast && (
         <Toast
@@ -253,23 +248,19 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Resum de comandes - Para TODOS los usuarios */}
       <ResumComandes data={resumComandes} isAdmin={isAdmin()} />
-
-      {/* Triple Card Grid - SOLO para ADMIN */}
-      {isAdmin() && (
+      
         <TripleCardGrid
           novetats={novetats}
           ultimsStocks={ultimsStocks}
           sobrePetició={sobrePeticio}
         />
-      )}
-
-      {/* Gráfica de comandas mensuales - Para TODOS (backend filtra por usuario) */}
+      
       <GraficaComandes data={comandesMensuals} isAdmin={isAdmin()} />
 
-      {/* Gráfica de productos - SOLO para ADMIN */}
       {isAdmin() && <GraficaProductes data={resumProductes} />}
     </div>
+     </MainLayout>
   );
+ 
 }

@@ -28,7 +28,7 @@ export default function MainLayout({ children }) {
         </h1>
       )}
 
-      <div className="p-4">{children}</div>
+      <div className="px-2 sm:px-4 md:px-6 py-4">{children}</div>
 
       {showCart && (
         <>

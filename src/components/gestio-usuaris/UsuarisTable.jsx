@@ -38,10 +38,8 @@ const DeleteIcon = () => (
 
 export default function UsuarisTable({ usuaris = [], onEdit, onDelete }) {
 
-  // Hemos eliminado el <h3> "Llista d'usuaris" ya que el título ahora lo pone MainLayout.
 
   return (
-    // Estilo del contenedor principal de la tabla, copiado de AdminPanel
     <div className="overflow-x-auto bg-white rounded-lg shadow text-gray-800">
 
       {usuaris.length === 0 ? (
