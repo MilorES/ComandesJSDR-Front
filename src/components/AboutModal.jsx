@@ -33,7 +33,6 @@ export default function AboutModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Header */}
         <div className="bg-slate-800 text-white p-6 rounded-t-lg">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">Quant a</h2>
@@ -49,16 +48,13 @@ export default function AboutModal({ isOpen, onClose }) {
           </div>
         </div>
 
-        {/* Contingut */}
         <div className="p-6 space-y-6">
-          {/* Descripció */}
           <section>
             <p className="text-gray-700 leading-relaxed">
               ComandesJSDR és una plataforma que centralitza la gestió de comandes, automatitzant processos que normalment són manuals. Gràcies a XML-UBL, permet interoperabilitat amb altres sistemes i compliment normatiu sense complicacions.
             </p>
           </section>
 
-          {/* Equip de desenvolupament */}
           <section>
             <h3 className="text-lg font-semibold text-slate-800 mb-3">Equip de desenvolupament</h3>
             <div className="space-y-2 text-gray-700">
@@ -81,7 +77,6 @@ export default function AboutModal({ isOpen, onClose }) {
             </div>
           </section>
 
-          {/* Informació acadèmica */}
           <section>
             <h3 className="text-lg font-semibold text-slate-800 mb-3">Informació acadèmica</h3>
             <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-gray-700">
@@ -104,7 +99,6 @@ export default function AboutModal({ isOpen, onClose }) {
             </div>
           </section>
 
-          {/* Repositoris GitHub */}
           <section>
             <h3 className="text-lg font-semibold text-slate-800 mb-3">Codi font</h3>
             <div className="space-y-2">
@@ -131,7 +125,6 @@ export default function AboutModal({ isOpen, onClose }) {
             </div>
           </section>
 
-          {/* Footer del modal */}
           <div className="pt-4 border-t space-y-3">
             <div className="text-sm text-gray-600 space-y-2">
               <div className="flex items-center gap-4">

@@ -55,9 +55,9 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
   const isCreating = !initialData;
 
   return (
-    <div className="p-1"> {/* Contenedor simple */}
+    <div className="p-1"> 
 
-      {/* Mensaje de error (Reemplazo de alert) */}
+      
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-6" role="alert">
           <span className="block sm:inline">{error}</span>
@@ -66,8 +66,6 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
           </span>
         </div>
       )}
-
-      {/* Eliminamos el título "Editar usuari" ya que el Modal lo proporciona */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 

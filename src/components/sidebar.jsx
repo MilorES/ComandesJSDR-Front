@@ -175,7 +175,6 @@ export default function Sidebar({ isOpen, onClose }) {
           )}
         </nav>
 
-        {/* Peu */}
         <div className="p-4 border-t border-blue-700 text-sm text-blue-200 space-y-2">
           <button
             onClick={() => setShowAbout(true)}

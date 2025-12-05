@@ -13,7 +13,6 @@ export default function Header({ onToggleMenu }) {
 
   return (
     <header className="bg-slate-800 text-white p-4 flex items-center justify-between shadow-md">
-      {/* --- Botón menú (visible solo en móvil) --- */}
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleMenu}
@@ -36,7 +35,6 @@ export default function Header({ onToggleMenu }) {
         </button>
       </div>
 
-      {/* --- Lado derecho: rol + logout --- */}
       <div className="flex items-center gap-4">
         {user && (
           <span className="text-sm font-medium sm:inline">

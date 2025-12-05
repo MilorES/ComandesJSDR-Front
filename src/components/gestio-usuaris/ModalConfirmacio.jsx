@@ -46,15 +46,12 @@ export default function ModalConfirmacio({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Overlay */}
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={onClose}
       />
       
-      {/* Modal */}
       <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 transform transition-all">
-        {/* Header con icono */}
         <div className="flex items-start gap-4 p-6 pb-4">
           <div className="flex-shrink-0">
             {styles.icon}
@@ -69,7 +66,6 @@ export default function ModalConfirmacio({
           </div>
         </div>
 
-        {/* Botones */}
         <div className="flex gap-3 px-6 py-4 bg-gray-50 rounded-b-lg">
           <button
             onClick={onClose}

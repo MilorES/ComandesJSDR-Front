@@ -288,7 +288,7 @@ export default function AdminPanel() {
       showToast("Producte eliminat correctament", "success");
       closeModal();
       await fetchProducts();
-      await fetchCategories(); // Recarregar categories per si la categoria eliminada ja no té productes
+      await fetchCategories(); 
     } catch (error) {
       showToast(error.message, "error");
     }
