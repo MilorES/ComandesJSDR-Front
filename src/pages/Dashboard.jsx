@@ -114,7 +114,6 @@ export default function Dashboard() {
   };
 
   const fetchNovetats = async () => {
-    
     try {
       const token = getToken();
       const response = await fetch(
@@ -132,6 +131,12 @@ export default function Dashboard() {
           logout();
           throw new Error("Sessió expirada");
         }
+        if (response.status === 403) {
+          // No té permisos: mostrar novetats buides i continuar
+          console.warn('No permisos per accedir a novetats (403)');
+          setNovetats([]);
+          return;
+        }
         throw new Error(`Error ${response.status}`);
       }
 
@@ -143,7 +148,6 @@ export default function Dashboard() {
   };
 
   const fetchUltimsStocks = async () => {
-    
     try {
       const token = getToken();
       const response = await fetch(
@@ -160,6 +164,11 @@ export default function Dashboard() {
         if (response.status === 401) {
           logout();
           throw new Error("Sessió expirada");
+        }
+        if (response.status === 403) {
+          console.warn('No permisos per accedir a ultims stocks (403)');
+          setUltimsStocks([]);
+          return;
         }
         throw new Error(`Error ${response.status}`);
       }
@@ -177,8 +186,6 @@ export default function Dashboard() {
   };
 
   const fetchSobrePeticio = async () => {
-    
-
     try {
       const token = getToken();
       const response = await fetch(
@@ -195,6 +202,11 @@ export default function Dashboard() {
         if (response.status === 401) {
           logout();
           throw new Error("Sessió expirada");
+        }
+        if (response.status === 403) {
+          console.warn('No permisos per accedir a sobre peticio (403)');
+          setSobrePeticio([]);
+          return;
         }
         throw new Error(`Error ${response.status}`);
       }

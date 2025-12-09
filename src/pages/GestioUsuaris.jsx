@@ -72,23 +72,39 @@ export default function GestioUsuaris() {
       if (editingUser) {
         url = `${import.meta.env.VITE_API_URL}/users/${editingUser.id}`;
         method = "PUT";
-        body = JSON.stringify({
+        const updatePayload = {
           role: formData.role || editingUser.role,
           isEnabled: formData.isEnabled ?? true,
-          fullName: formData.fullName ?? editingUser.fullName ?? "",
-          ...(formData.password && { password: formData.password }),
+        };
+        if (formData.password) updatePayload.password = formData.password;
+        if (formData.fullName) updatePayload.fullName = formData.fullName;
+        if (formData.email) updatePayload.email = formData.email;
+        // Eliminar claus amb valor cadena buida abans d'enviar
+        Object.keys(updatePayload).forEach(k => {
+          if (updatePayload[k] === "") delete updatePayload[k];
         });
+        body = JSON.stringify(updatePayload);
       } else {
+        // Validacions bàsiques al client per evitar peticions clarament invàlides
+        const usernameTrim = (formData.username || "").toString().trim();
+        if (!usernameTrim) throw new Error("El nom d'usuari és obligatori");
+        if (!formData.password || formData.password.length < 6) throw new Error("La contrasenya ha de tenir almenys 6 caràcters");
+
         url = `${import.meta.env.VITE_API_URL}/users`;
         method = "POST";
-        body = JSON.stringify({
-          username: formData.username,
+        const payload = {
+          username: usernameTrim,
           password: formData.password,
           role: formData.role,
           isEnabled: true,
-          fullName: formData.fullName || "",
-          email: formData.email || "",
+        };
+        if (formData.fullName) payload.fullName = formData.fullName;
+        if (formData.email) payload.email = formData.email;
+        // Eliminar claus amb valor cadena buida abans d'enviar
+        Object.keys(payload).forEach(k => {
+          if (payload[k] === "") delete payload[k];
         });
+        body = JSON.stringify(payload);
       }
 
       const response = await fetch(url, {
@@ -100,10 +116,22 @@ export default function GestioUsuaris() {
         body,
       });
 
-      const data = await response.json();
+      // Parsejar resposta amb tolerància: JSON primer, si falla provar text
+      let data = null;
+      try {
+        data = await response.json();
+      } catch (e) {
+        try {
+          const txt = await response.text();
+          if (txt) data = { message: txt };
+        } catch (ee) {
+          data = null;
+        }
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Error al guardar usuari");
+        const serverMsg = data?.message || data?.title || `Error ${response.status} ${response.statusText}`;
+        throw new Error(serverMsg);
       }
 
       showToast(
@@ -237,7 +265,6 @@ export default function GestioUsuaris() {
           </button>
         </div>
 
-        {/* Modal CREAR usuario */}
         <Modal
           isOpen={isModalOpen && !editingUser}
           onClose={handleCloseModal}
@@ -250,7 +277,6 @@ export default function GestioUsuaris() {
           />
         </Modal>
 
-        {/* Modal EDITAR usuario */}
         <Modal
           isOpen={isModalOpen && !!editingUser}
           onClose={handleCancel}
@@ -265,7 +291,6 @@ export default function GestioUsuaris() {
           )}
         </Modal>
 
-        {/* Modal CONFIRMACIÓN eliminar */}
         <ModalConfirmacio
           isOpen={!!deletingUser}
           onClose={() => setDeletingUser(null)}
@@ -277,7 +302,6 @@ export default function GestioUsuaris() {
           type="danger"
         />
 
-        {/* Tabla de usuarios */}
         <UsuarisTable
           usuaris={usuaris}
           onEdit={handleEdit}

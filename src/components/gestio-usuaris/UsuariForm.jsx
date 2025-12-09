@@ -48,7 +48,13 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
       return;
     }
 
-    onSave(form);
+    // Netegem el payload: eliminem claus amb cadena buida/null/undefined
+    const payload = { ...form };
+    Object.keys(payload).forEach((k) => {
+      if (payload[k] === "" || payload[k] === null || typeof payload[k] === "undefined") delete payload[k];
+    });
+
+    onSave(payload);
   };
 
   // Eliminamos containerClasses, ya que el Modal se encarga del fondo y la sombra
@@ -117,6 +123,8 @@ export default function UsuariForm({ initialData, onCancel, onSave }) {
             <option value="Administrator">Administrador</option>
           </select>
         </div>
+        
+        
       </div>
 
       <div className="mt-6 flex justify-end space-x-3">

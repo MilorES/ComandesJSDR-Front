@@ -38,6 +38,9 @@ export default function Header({ onToggleMenu }) {
         {user && (
           <span className="text-gray-200 sm:inline">
             {user.username}
+            {user.role && (
+              <span className="text-gray-400 ml-1">({user.role})</span>
+            )}
           </span>
         )}
 
