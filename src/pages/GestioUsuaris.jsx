@@ -14,8 +14,6 @@ export default function GestioUsuaris() {
   const [toast, setToast] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Estado para el modal de confirmación de eliminación
   const [deletingUser, setDeletingUser] = useState(null);
 
   const showToast = (message, type = "success") => {
@@ -29,6 +27,7 @@ export default function GestioUsuaris() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setEditingUser(null);
   };
 
   const fetchUsuaris = async () => {
@@ -74,8 +73,9 @@ export default function GestioUsuaris() {
         url = `${import.meta.env.VITE_API_URL}/users/${editingUser.id}`;
         method = "PUT";
         body = JSON.stringify({
-          role: formData.role,
-          isEnabled: true,
+          role: formData.role || editingUser.role,
+          isEnabled: formData.isEnabled ?? true,
+          fullName: formData.fullName ?? editingUser.fullName ?? "",
           ...(formData.password && { password: formData.password }),
         });
       } else {
@@ -86,6 +86,8 @@ export default function GestioUsuaris() {
           password: formData.password,
           role: formData.role,
           isEnabled: true,
+          fullName: formData.fullName || "",
+          email: formData.email || "",
         });
       }
 
@@ -117,12 +119,10 @@ export default function GestioUsuaris() {
     }
   };
 
-  // Abrir modal de confirmación de eliminación
   const handleDeleteClick = (user) => {
     setDeletingUser(user);
   };
 
-  // Confirmar eliminación
   const handleConfirmDelete = async () => {
     if (!deletingUser) return;
 
@@ -140,28 +140,68 @@ export default function GestioUsuaris() {
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || "Error al eliminar usuari");
+        let errorMessage = "Error al eliminar usuari";
+        try {
+          const data = await response.json();
+          errorMessage = data.message || errorMessage;
+        } catch (e) {
+          errorMessage = `Error ${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
       showToast("Usuari eliminat correctament", "success");
+      setDeletingUser(null);
       fetchUsuaris();
     } catch (error) {
       showToast(error.message || "Error al eliminar usuari", "error");
-    } finally {
       setDeletingUser(null);
     }
   };
 
   const handleEdit = (user) => {
     setEditingUser(user);
-    setIsModalOpen(false);
+    setIsModalOpen(true);
   };
 
   const handleCancel = () => {
     setEditingUser(null);
+    setIsModalOpen(false);
+  };
+
+  const handleToggleEnabled = async (user) => {
+    try {
+      const token = getToken();
+
+      const body = JSON.stringify({
+        role: user.role,
+        isEnabled: !user.isEnabled,
+        fullName: user.fullName || "",
+      });
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body,
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Error al actualitzar usuari");
+      }
+
+      showToast(
+        `Usuari ${user.username} ${!user.isEnabled ? "habilitat" : "deshabilitat"} correctament`,
+        "success"
+      );
+      fetchUsuaris();
+    } catch (error) {
+      showToast(error.message || "Error al actualitzar usuari", "error");
+    }
   };
 
   if (loading) {
@@ -197,7 +237,12 @@ export default function GestioUsuaris() {
           </button>
         </div>
 
-        <Modal isOpen={isModalOpen && !editingUser} onClose={handleCloseModal} title="Crear Nou Usuari">
+        {/* Modal CREAR usuario */}
+        <Modal
+          isOpen={isModalOpen && !editingUser}
+          onClose={handleCloseModal}
+          title="Crear Nou Usuari"
+        >
           <UsuariForm
             initialData={null}
             onCancel={handleCloseModal}
@@ -205,10 +250,11 @@ export default function GestioUsuaris() {
           />
         </Modal>
 
+        {/* Modal EDITAR usuario */}
         <Modal
-          isOpen={!!editingUser}
+          isOpen={isModalOpen && !!editingUser}
           onClose={handleCancel}
-          title={`Editar Usuari: ${editingUser?.username || 'Càrrega...'}`}
+          title={`Editar Usuari: ${editingUser?.username || "Càrrega..."}`}
         >
           {editingUser && (
             <UsuariForm
@@ -219,6 +265,7 @@ export default function GestioUsuaris() {
           )}
         </Modal>
 
+        {/* Modal CONFIRMACIÓN eliminar */}
         <ModalConfirmacio
           isOpen={!!deletingUser}
           onClose={() => setDeletingUser(null)}
@@ -230,10 +277,12 @@ export default function GestioUsuaris() {
           type="danger"
         />
 
+        {/* Tabla de usuarios */}
         <UsuarisTable
           usuaris={usuaris}
           onEdit={handleEdit}
           onDelete={handleDeleteClick}
+          onToggleEnabled={handleToggleEnabled} // añadir función toggle
         />
       </div>
     </MainLayout>

@@ -4,348 +4,336 @@ import MainLayout from "../layouts/MainLayout";
 import Toast from "../components/Toast";
 import { getEstatText, getEstatColor, EstatComanda } from "../utils/estatComanda";
 
+// ==== ICONOS ====
+
+
 const DownloadIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className="w-5 h-5"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-    />
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+    strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
   </svg>
 );
 
-const SearchIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 2048 2048" className="w-5 h-5 text-gray-400">
-    <defs><style>{`.fil1,.fil3{fill:#003761;fill-rule:nonzero}.fil1{fill:#01579b}`}</style></defs>
-    <g id="Layer_x0020_1"><g id="_220499688"><circle cx="767" cy="769" r="452" style={{ fill:"#b3e5fe",stroke:"#373435",strokeWidth:"2.08347" }}/><path className="fil1" d="M405 407c100-100 231-150 362-150s262 50 362 150 150 231 150 362-50 262-150 362-231 150-362 150-262-50-362-150-150-231-150-362 50-262 150-362zm362-86c-115 0-229 44-317 131-87 87-131 202-131 317s44 229 131 317c87 87 202 131 317 131s229-44 317-131c87-87 131-202 131-317s-44-229-131-317c-87-87-202-131-317-131z"/><path d="M578 1006c14 11 16 31 5 45s-31 16-45 5c-6-5-11-9-16-14-6-5-11-10-15-14-72-72-108-166-108-260s36-188 108-260c2-2 6-6 12-11 13-12 33-11 45 2s11 33-2 45c-2 1-5 5-9 9-59 59-89 137-89 214 0 78 30 155 89 214 4 4 9 8 13 12 5 4 9 8 13 11z" style={{ fill:"#e1f5fe",fillRule:"nonzero" }}/><path className="fil1" d="m1115 1066 222 222-46 45-222-222z"/><path className="fil3" d="m1262 1355 93-93c10-10 23-15 36-15s26 5 36 15l352 349c10 10 15 23 15 36s-5 26-15 36l-93 93c-10 10-23 15-36 15s-26-5-36-15l-352-349c-10-10-15-23-15-36s5-26 15-36z"/><path d="m1309 1308 46-46c10-10 23-15 36-15s26 5 36 15l352 349c10 10 15 23 15 36s-5 26-15 36l-47 47-422-422z" style={{ fill:"#00406f",fillRule:"nonzero" }}/><path className="fil3" d="m1262 1355 47-47 422 422-46 46c-10 10-23 15-36 15s-26-5-36-15l-352-349c-10-10-15-23-15-36s5-26 15-36z"/></g><path style={{ fill:"none" }} d="M0 0h2048v2048H0z"/></g>
+
+const EditIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+    viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+    className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
   </svg>
 );
 
+// BORRAR 
+const DeleteIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+    viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
+    className="w-5 h-5">
+    <path strokeLinecap="round" strokeLinejoin="round"
+      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+  </svg>
+);
 
 export default function GestioComandes() {
-  const { getToken, logout } = useAuth();
+
+  const { getToken, logout, isAdmin, user } = useAuth();
   const [comandes, setComandes] = useState([]);
-  const [filteredComandes, setFilteredComandes] = useState([]);
+  const [usuaris, setUsuaris] = useState({});
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
-  const [expandedId, setExpandedId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentComanda, setCurrentComanda] = useState(null);
+  const [newEstat, setNewEstat] = useState("");
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [estatFilter, setEstatFilter] = useState("");
+  // MODAL ELIMINAR
+  const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
+  const [comandaToDelete, setComandaToDelete] = useState(null);
 
-  const showToast = (message, type = "success") => {
-    setToast({ message, type });
-  };
+  const showToast = (message, type = "success") => setToast({ message, type });
 
-  const toggleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id);
+  const fetchUsuaris = async () => {
+    if (!isAdmin()) return;
+    try {
+      const token = getToken();
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const map = {};
+        data.forEach(u => map[u.id] = u.fullName || u.username);
+        setUsuaris(map);
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const fetchComandes = async () => {
     try {
       setLoading(true);
       const token = getToken();
-
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/comandes`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/comandes`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          logout();
-          throw new Error("Sessió expirada");
-        }
-        throw new Error(`Error ${response.status}`);
+      if (!res.ok) {
+        if (res.status === 401) logout();
+        throw new Error("Error carregant comandes");
       }
 
-      const data = await response.json();
-      setComandes(data);
-      setFilteredComandes(data);
-    } catch (error) {
-      showToast(error.message || "Error al carregar comandes", "error");
+      setComandes(await res.json());
+    } catch (e) {
+      showToast(e.message, "error");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    fetchUsuaris();
     fetchComandes();
   }, []);
 
-  useEffect(() => {
-    let filtered = [...comandes];
-
-    if (searchTerm.trim() !== "") {
-      filtered = filtered.filter((c) =>
-        c.numeroComanda.toLowerCase().startsWith(searchTerm.toLowerCase())
-      );
-    }
-
-    if (estatFilter !== "") {
-      const estatNum = parseInt(estatFilter);
-      filtered = filtered.filter((c) => c.estat === estatNum);
-    }
-
-    setFilteredComandes(filtered);
-  }, [searchTerm, estatFilter, comandes]);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ca-ES", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+  const formatDate = (d) => {
+    if (!d) return "-";
+    return new Date(d).toLocaleDateString("ca-ES", {
+      day: "2-digit", month: "2-digit", year: "numeric",
+      hour: "2-digit", minute: "2-digit"
     });
   };
 
-  const downloadXmlUbl = async (comandaId, numeroComanda) => {
+  // === MODAL EDITAR ESTAT ===
+  const openModal = (c) => {
+    setCurrentComanda(c);
+    setNewEstat(c.estat);
+    setModalOpen(true);
+  };
+
+  const updateEstat = async () => {
     try {
       const token = getToken();
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/comandes/${comandaId}/export/xml-ubl`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const r = await fetch(`${import.meta.env.VITE_API_URL}/comandes/${currentComanda.id}/estat`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ estat: parseInt(newEstat) })
+      });
+
+      if (!r.ok) throw new Error("Error actualitzant estat");
+
+      setComandes(prev =>
+        prev.map(c => c.id === currentComanda.id
+          ? { ...c, estat: parseInt(newEstat) }
+          : c)
       );
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          logout();
-          throw new Error("Sessió expirada");
-        }
-        throw new Error("Error al descarregar XML");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `comanda-${numeroComanda}.xml`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      showToast("XML descarregat correctament", "success");
-    } catch (error) {
-      showToast(error.message || "Error al descarregar XML", "error");
+      setModalOpen(false);
+      showToast("Estat actualitzat correctament");
+    } catch (e) {
+      showToast(e.message, "error");
     }
   };
 
-  if (loading) {
+  // ==== MODAL ELIMINAR ====
+  const openDeleteModal = (c) => {
+    setComandaToDelete(c);
+    setModalDeleteOpen(true);
+  };
+
+  const confirmDeleteComanda = async () => {
+    try {
+      const token = getToken();
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/comandes/${comandaToDelete.id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (!res.ok) throw new Error("Error eliminant la comanda");
+
+      setComandes(prev => prev.filter(c => c.id !== comandaToDelete.id));
+
+      showToast("Comanda eliminada correctament");
+      setModalDeleteOpen(false);
+    } catch (e) {
+      showToast(e.message, "error");
+    }
+  };
+
+  const getNomUsuari = (uid) => isAdmin()
+    ? (usuaris[uid] || "Carregant...")
+    : (user?.fullName || user?.username);
+
+  // ================== RENDER ==================
+
+  if (loading)
     return (
       <MainLayout>
-        <div className="flex items-center justify-center p-8">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-700 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Carregant comandes...</p>
-          </div>
-        </div>
+        <div className="p-8 text-center">Carregant comandes...</div>
       </MainLayout>
     );
-  }
 
   return (
     <MainLayout>
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      {toast && <Toast {...toast} onClose={() => setToast(null)} />}
 
-      <div className="p-4 sm:p-6 flex justify-center">
-        <div className="w-[99%] md:w-full max-w-[1700px] flex flex-col space-y-6">
-          
-          <div className="flex flex-col md:flex-row gap-4 items-end bg-white p-4 rounded-xl shadow-md border border-gray-200">
-            <div className="flex-1 max-w-lg w-full">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Cercar per número de comanda
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="COM-2024-000001"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                />
-                <span className="absolute left-3 top-1/2 -translate-y-1/2">
-                  <SearchIcon />
-                </span>
-              </div>
-            </div>
+      <div className="p-4 flex justify-center">
+        <div className="w-[99%] max-w-[1700px]">
 
-            <div className="md:w-72 w-full">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filtrar per estat
-              </label>
-              <select
-                value={estatFilter}
-                onChange={(e) => setEstatFilter(e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition bg-white"
-              >
-                <option value="">Tots els estats</option>
-                <option value={EstatComanda.Esborrany}>Esborrany</option>
-                <option value={EstatComanda.PendentAprovacio}>Pendent aprovació</option>
-                <option value={EstatComanda.Aprovada}>Aprovada</option>
-                <option value={EstatComanda.EnProces}>En procés</option>
-                <option value={EstatComanda.Enviada}>Enviada</option>
-                <option value={EstatComanda.Finalitzada}>Finalitzada</option>
-                <option value={EstatComanda.Cancellada}>Cancel·lada</option>
-              </select>
-            </div>
+          <div className="bg-white shadow rounded-xl overflow-x-auto border">
 
-            {(searchTerm || estatFilter) && (
-              <div className="flex items-end w-full md:w-auto">
-                <button
-                  onClick={() => {
-                    setSearchTerm("");
-                    setEstatFilter("");
-                  }}
-                  className="w-full md:w-auto px-5 py-2.5 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium shadow-sm hover:shadow-md whitespace-nowrap"
-                >
-                  Netejar filtres
-                </button>
-              </div>
-            )}
-          </div>
+            <table className="w-full">
+              <thead className="bg-slate-800 text-white">
+                <tr>
+                  <th className="py-3 px-4 text-left">Usuari / Comanda</th>
+                  <th className="py-3 px-4 text-left hidden md:table-cell">Data</th>
+                  <th className="py-3 px-4 text-left">Total</th>
+                  <th className="py-3 px-4 text-center hidden md:table-cell">Estat</th>
+                  {isAdmin() && (
+                    <th className="py-3 px-4 text-center">Accions</th>
+                  )}
+                  <th className="py-3 px-4 text-center">XML</th>
+                </tr>
+              </thead>
 
-          <div className="bg-white shadow-lg rounded-xl border border-gray-200 p-0 overflow-x-auto">
-            
-            <div className="px-4 pt-4 text-sm text-gray-600">
-              {filteredComandes.length === comandes.length ? (
-                <span>Total: <strong>{comandes.length}</strong> comandes</span>
-              ) : (
-                <span>
-                  Mostrant <strong>{filteredComandes.length}</strong> de <strong>{comandes.length}</strong> comandes
-                </span>
-              )}
-            </div>
+              <tbody>
+                {comandes.map((c) => (
+                  <tr key={c.id} className="border-b hover:bg-gray-100">
 
-            {filteredComandes.length === 0 ? (
-              <div className="text-center py-12">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-16 h-16 mx-auto text-gray-300 mb-3"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"
-                  />
-                </svg>
-                <p className="text-gray-500 text-lg">
-                  {searchTerm || estatFilter
-                    ? "No s'han trobat comandes amb els filtres aplicats"
-                    : "No hi ha comandes encara"}
-                </p>
-              </div>
-            ) : (
-              <table className="w-full border-collapse mt-2">
-                <thead className="bg-slate-800 text-white rounded-t-xl">
-                  <tr>
-                    <th className="py-3 px-4 text-left w-[150px] rounded-tl-xl">Número</th>
-                    <th className="py-3 px-4 text-left w-[200px] hidden md:table-cell">Data</th>
-                    <th className="py-3 px-4 text-left">Total</th>
-                    <th className="py-3 px-4 text-center hidden md:table-cell w-[140px]">Estat</th>
-                    <th className="py-3 px-4 text-center w-[60px] rounded-tr-xl">XML</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredComandes.map((comanda) => (
-                    <>
-                      <tr
-                        key={comanda.id}
-                        className="border-b hover:bg-gray-100 transition-colors cursor-pointer"
-                        onClick={() => toggleExpand(comanda.id)}
-                      >
-                        <td className="py-3 px-4 text-gray-700 font-medium break-words md:break-normal">
-                          {comanda.numeroComanda}
-                        </td>
-                        <td className="py-3 px-4 text-gray-600 truncate hidden md:table-cell">
-                          {formatDate(comanda.dataCreacio)}
-                        </td>
-                        <td className="py-3 px-4 text-gray-700 font-semibold">
-                          {comanda.totalAmbDescompte.toFixed(2)} €
-                        </td>
-                        <td className="py-3 px-4 text-center hidden md:table-cell">
-                          <span
-                            className={`px-3 py-1 rounded-full text-sm font-medium whitespace-nowrap ${getEstatColor(
-                              comanda.estat
-                            )}`}
-                          >
-                            {getEstatText(comanda.estat)}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-center w-[60px]">
+                    <td className="px-4 py-3">
+                      {getNomUsuari(c.usuariId)}<br />
+                      <small>{c.numeroComanda}</small>
+                    </td>
+
+                    <td className="px-4 py-3 hidden md:table-cell">
+                      {formatDate(c.dataCreacio)}
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {c.totalAmbDescompte.toFixed(2)} €
+                    </td>
+
+                    <td className="px-4 py-3 hidden md:table-cell text-center">
+                      <span className={`px-3 py-1 rounded-full text-sm ${getEstatColor(c.estat)}`}>
+                        {getEstatText(c.estat)}
+                      </span>
+                    </td>
+
+                    {isAdmin() && (
+                      <td className="px-4 py-3 text-center">
+                        <div className="flex justify-center gap-2">
+
+                          {/* EDITAR */}
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation(); 
-                              downloadXmlUbl(comanda.id, comanda.numeroComanda);
-                            }}
-                            className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600"
-                            title="Descarregar XML-UBL"
+                            className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg"
+                            onClick={() => openModal(c)}
                           >
-                            <DownloadIcon />
+                            <EditIcon />
                           </button>
-                        </td>
-                      </tr>
-                      {expandedId === comanda.id && (
-                        <tr>
-                          <td colSpan={5} className="bg-gray-50 p-4">
-                            <h4 className="font-bold text-gray-700 mb-2">Detall de la comanda:</h4>
-                            <div className="overflow-x-auto">
-                              <table className="min-w-full text-sm bg-white border border-gray-200 rounded-lg shadow-sm">
-                                <thead>
-                                  <tr className="bg-gray-200 text-gray-700">
-                                    <th className="py-2 px-3 text-left w-1/2 rounded-tl-lg">Producte</th>
-                                    <th className="py-2 px-3 text-left w-1/4">Quantitat</th>
-                                    <th className="py-2 px-3 text-right w-1/4 rounded-tr-lg">Total</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {comanda.linies.map((l, index) => (
-                                    <tr key={l.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                      <td className="py-2 px-3 text-gray-600">{l.nomProducte}</td>
-                                      <td className="py-2 px-3 text-gray-600">{l.quantitat}</td>
-                                      <td className="py-2 px-3 text-gray-600 text-right">{l.total.toFixed(2)} €</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ))}
-                </tbody>
-              </table>
-            )}
+
+                          {/* ELIMINAR */}
+                          <button
+                            className="p-2 text-red-600 hover:bg-red-100 rounded-lg"
+                            onClick={() => openDeleteModal(c)}
+                          >
+                            <DeleteIcon />
+                          </button>
+
+                        </div>
+                      </td>
+                    )}
+
+                    {/* DESCARGAR XML */}
+                    <td className="px-4 py-3 text-center">
+                      <button
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        onClick={() => downloadXmlUbl(c.id, c.numeroComanda)}
+                      >
+                        <DownloadIcon />
+                      </button>
+                    </td>
+
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
           </div>
+
         </div>
       </div>
+
+      {/* =================== MODAL EDITAR =================== */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-80">
+            <h3 className="text-lg font-bold mb-4">
+              Canviar estat – {currentComanda.numeroComanda}
+            </h3>
+
+            <select
+              className="w-full border px-3 py-2 rounded mb-4"
+              value={newEstat}
+              onChange={(e) => setNewEstat(e.target.value)}
+            >
+              {Object.keys(EstatComanda).map((k) => (
+                <option key={k} value={EstatComanda[k]}>
+                  {getEstatText(EstatComanda[k])}
+                </option>
+              ))}
+            </select>
+
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setModalOpen(false)} className="border px-3 py-1 rounded">
+                Cancel·lar
+              </button>
+              <button onClick={updateEstat} className="bg-blue-600 text-white px-3 py-1 rounded">
+                Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =================== MODAL ELIMINAR =================== */}
+      {modalDeleteOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+          <div className="bg-white p-6 rounded-lg w-80">
+            <h3 className="text-lg font-bold mb-4 text-red-600">
+              Eliminar Comanda
+            </h3>
+
+            <p className="mb-4">
+              Estàs segur que vols eliminar definitivament la comanda:
+              <br />
+              <strong>{comandaToDelete.numeroComanda}</strong>?
+            </p>
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setModalDeleteOpen(false)}
+                className="border px-3 py-1 rounded"
+              >
+                Cancel·lar
+              </button>
+
+              <button
+                onClick={confirmDeleteComanda}
+                className="bg-red-600 text-white px-3 py-1 rounded"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+        </div>
+      )}
+
     </MainLayout>
   );
 }

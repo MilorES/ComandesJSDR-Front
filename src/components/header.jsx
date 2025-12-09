@@ -1,10 +1,9 @@
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Header({ onToggleMenu }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  
 
   const handleLogout = () => {
     logout();
@@ -35,10 +34,10 @@ export default function Header({ onToggleMenu }) {
         </button>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         {user && (
-          <span className="text-sm font-medium sm:inline">
-            {user.role === "Administrator" ? "Administrador" : "Usuari"}
+          <span className="text-gray-200 sm:inline">
+            {user.username}
           </span>
         )}
 
