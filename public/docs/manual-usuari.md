@@ -11,32 +11,11 @@ ComandesJSDR és una aplicació web per a la gestió de comandes i productes. Pe
 1. [Login (Inici de Sessió)](#1-login-inici-de-sessió)
 2. [Logout (Tancar Sessió)](#2-logout-tancar-sessió)
 3. [Interfície Principal](#3-interfície-principal)
-   - 3.1 Capçalera (Header)
-   - 3.2 Menú Lateral (Sidebar)
-   - 3.3 Carret de Compra (Cart)
 4. [Dashboard (Panell de Control)](#4-dashboard-panell-de-control)
 5. [Productes](#5-productes)
-   - 5.1 Veure Productes
-   - 5.2 Cercar Productes
-   - 5.3 Afegir Productes al Carret
-   - 5.4 Gestionar el Carret
-   - 5.5 Realitzar una Comanda
 6. [Gestió de Comandes](#6-gestió-de-comandes)
-   - 6.1 Veure les teves Comandes
-   - 6.2 Cercar i Filtrar
-   - 6.3 Veure Detalls d'una Comanda
-   - 6.4 Descarregar XML
-   - 6.5 Estats de les Comandes
 7. [Gestió de Productes](#7-gestió-de-productes-només-administrador) *(Administrador)*
-   - 7.1 Accedir a la Gestió
-   - 7.2 Crear un Nou Producte
-   - 7.3 Editar un Producte
-   - 7.4 Eliminar un Producte
 8. [Gestió d'Usuaris](#8-gestió-dusuaris-només-administrador) *(Administrador)*
-   - 8.1 Accedir a la Gestió
-   - 8.2 Crear un Nou Usuari
-   - 8.3 Editar un Usuari
-   - 8.4 Eliminar un Usuari
 9. [Quant a (Informació del Projecte)](#9-quant-a-informació-del-projecte)
 10. [Manual d'Usuari](#10-manual-dusuari)
 11. [Notificacions](#11-notificacions)
