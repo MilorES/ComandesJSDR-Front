@@ -80,11 +80,29 @@ export default function ManualModal({ isOpen, onClose }) {
                       {children}
                     </h1>
                   ),
-                  h2: ({ children }) => (
-                    <h2 className="text-2xl font-bold text-slate-800 mt-8 mb-4">
-                      {children}
-                    </h2>
-                  ),
+                  h2: ({ children }) => {
+                    // Generar ID desde el contenido del h2
+                    const text = String(children);
+                    const id = text
+                      .toLowerCase()
+                      .replace(/[àáâäæèéêëìíîïðòóôõöùúûü]/g, (c) => ({
+                        à: 'a', á: 'a', â: 'a', ä: 'a', æ: 'a',
+                        è: 'e', é: 'e', ê: 'e', ë: 'e',
+                        ì: 'i', í: 'i', î: 'i', ï: 'i',
+                        ð: 'd',
+                        ò: 'o', ó: 'o', ô: 'o', õ: 'o', ö: 'o',
+                        ù: 'u', ú: 'u', û: 'u', ü: 'u'
+                      }[c] || c))
+                      .replace(/[^\w\s-]/g, '')
+                      .trim()
+                      .replace(/\s+/g, '-')
+                      .replace(/-+/g, '-');
+                    return (
+                      <h2 id={id} className="text-2xl font-bold text-slate-800 mt-8 mb-4">
+                        {children}
+                      </h2>
+                    );
+                  },
                   h3: ({ children }) => (
                     <h3 className="text-xl font-semibold text-slate-700 mt-6 mb-3">
                       {children}
@@ -141,7 +159,7 @@ export default function ManualModal({ isOpen, onClose }) {
                     </tr>
                   ),
                   code: ({ inline, children }) => 
-                    inline ? (
+                    inline || children ? (
                       <code className="bg-gray-200 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono">
                         {children}
                       </code>
@@ -164,7 +182,16 @@ export default function ManualModal({ isOpen, onClose }) {
                           href={href}
                           onClick={(e) => {
                             e.preventDefault();
-                            const id = href.replace('#', '');
+                            let id = decodeURIComponent(href.replace('#', ''));
+                            // Eliminar acentos del ID decodificado
+                            id = id.replace(/[àáâäæèéêëìíîïðòóôõöùúûü]/g, (c) => ({
+                              à: 'a', á: 'a', â: 'a', ä: 'a', æ: 'a',
+                              è: 'e', é: 'e', ê: 'e', ë: 'e',
+                              ì: 'i', í: 'i', î: 'i', ï: 'i',
+                              ð: 'd',
+                              ò: 'o', ó: 'o', ô: 'o', õ: 'o', ö: 'o',
+                              ù: 'u', ú: 'u', û: 'u', ü: 'u'
+                            }[c] || c));
                             const element = document.getElementById(id);
                             if (element) {
                               element.scrollIntoView({ behavior: 'smooth', block: 'start' });
