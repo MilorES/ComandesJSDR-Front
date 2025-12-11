@@ -8,7 +8,7 @@ export default function ManualModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen) {
-      fetch("/docs/manual-usuari.md")
+      fetch(`/docs/manual-usuari.md?v=${__BUILD_DATE__}`)
         .then((response) => response.text())
         .then((text) => {
           setContent(text);
