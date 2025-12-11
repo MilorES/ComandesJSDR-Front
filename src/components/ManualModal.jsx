@@ -156,6 +156,48 @@ export default function ManualModal({ isOpen, onClose }) {
                   strong: ({ children }) => (
                     <strong className="font-bold text-slate-900">{children}</strong>
                   ),
+                  a: ({ href, children }) => {
+                    // Si és un enllaç intern (anchor), gestiona el scroll
+                    if (href?.startsWith('#')) {
+                      return (
+                        <a
+                          href={href}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const id = href.replace('#', '');
+                            const element = document.getElementById(id);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            } else {
+                              // Si no troba l'ID exacte, busca per text del títol
+                              const headings = document.querySelectorAll('.manual-content h1, .manual-content h2, .manual-content h3');
+                              const targetHeading = Array.from(headings).find(h => {
+                                const text = h.textContent.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+                                return id.includes(text) || text.includes(id);
+                              });
+                              if (targetHeading) {
+                                targetHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                              }
+                            }
+                          }}
+                          className="text-blue-600 hover:text-blue-800 underline cursor-pointer"
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+                    // Enllaç extern
+                    return (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline"
+                      >
+                        {children}
+                      </a>
+                    );
+                  },
                 }}
               >
                 {content}
