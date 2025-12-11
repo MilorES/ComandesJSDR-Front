@@ -36,9 +36,9 @@ Un cop dins, veuràs un menú lateral (sidebar) amb les opcions disponibles:
 | ⚙️    | Administració   | Gestió de productes (només admin)   |
 | 👥    | Gestió Usuaris  | Gestió d'usuaris (només admin)      |
 
-A la capçalera superior trobaràs:
-- El teu rol (Usuari o Administrador)
-- Botó "Sortir" per tancar la sessió
+**A la capçalera superior (dreta):**
+- **Usuari i Rol:** Es mostra el teu nom d'usuari seguit del teu rol entre parèntesis. Exemple: `usuari (Administrator)` o `usuari (User)`
+- **Botó "Sortir":** Permet tancar la sessió i retornar a la pantalla de login
 
 ---
 
@@ -265,4 +265,57 @@ Els missatges es tanquen automàticament després de 4 segons o pots fer clic a 
 - Actualitza la pàgina si veus dades desactualitzades
 - Revisa l'estoc abans d'afegir productes al carret
 - Descarrega els XMLs per tenir còpia de les comandes
- - Contacta l'administrador si necessites canviar de rol o recuperar contrasenya
+- Contacta l'administrador si necessites canviar de rol o recuperar contrasenya
+
+---
+
+## 13. Accés a Informació del Projecte
+
+Des de qualsevol pantalla de l'aplicació (inclòs el login), pots accedir a informació sobre el projecte:
+
+**Des del Sidebar (menú lateral):**
+1. Fes clic al text "© 2025 ComandesJSDR v0.5.0" a la part inferior del sidebar
+2. S'obrirà una finestra emergent amb:
+   - Informació del projecte
+   - Equip de desenvolupament i seus rols
+   - Informació acadèmica
+   - Versió de l'aplicació
+   - Versió i data del backend
+   - Enllaç al repositori GitHub
+
+**Des de la Pantalla de Login:**
+1. A la part inferior de la caixa de login
+2. Fes clic a "Informació del projecte"
+3. Es mostrarà la mateixa finestra emergent amb la informació del projecte
+
+---
+
+## 14. Visualitzar i Descarregar el Manual
+
+### 14.1 Obrir el Manual
+
+**Des del Sidebar (menú lateral):**
+1. Fes clic al botó "Manual d'usuari" a la part inferior
+2. S'obrirà una finestra emergent amb el manual complet
+
+**Des de la Pantalla de Login:**
+1. A la part inferior de la caixa de login
+2. Fes clic a "Manual d'usuari"
+3. Es mostrarà el manual en mode lectura
+
+### 14.2 Descarregar el Manual en PDF
+
+Dins de la finestra emergent del Manual:
+1. Fes clic al botó blau "⬇️ Descarregar PDF" a la capçalera
+2. Es descarregarà un fitxer `Manual-Usuari-ComandesJSDR-vX.X.X.pdf`
+3. El fitxer inclou la versió de l'aplicació en el nom
+
+### 14.3 Navegar pel Manual
+
+- Pots fer scroll dins de la finestra emergent per veure tot el contingut
+- El manual està formatat amb:
+  - Títols i subtítols
+  - Llistes numeradas i de punts
+  - Taules de referència
+  - Notes destacades amb color
+- Tancar la finestra emergent: Fes clic a la "X" de la cantonada superior dreta
